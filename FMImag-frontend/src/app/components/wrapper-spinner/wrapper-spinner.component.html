@@ -1,0 +1,11 @@
+<div class="wrapper">
+  <div class="overlay" *ngIf="spinnerService.showSpinner | async">
+    <div class="spinner-wrapper">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+
+  <div class="loaded-content" [class.blurred]="spinnerService.showSpinner | async">
+    <router-outlet></router-outlet>
+  </div>
+</div>
