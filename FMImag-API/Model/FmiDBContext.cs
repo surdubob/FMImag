@@ -6,6 +6,11 @@ namespace FMImag.Model
     {
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Filter> Filters { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+
         public FmiDBContext(DbContextOptions<FmiDBContext> options) : base(options) { }
     }
 }
