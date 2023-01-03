@@ -20,14 +20,8 @@ namespace FMImag.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpGet]
-        public IList<User> Get()
-        {
-            return dbContext.Users.ToList();
-        }
-
         [HttpPost]
-        [AllowAnonymous]
+        [AuthorizeRoles(UserRole.ADMIN)]
         public async Task<ActionResult<UserEditDTO>> CreateUser(UserEditDTO user)
         {
             var existingUser = dbContext.Users.FirstOrDefault(usr => usr.Username == user.Username);
