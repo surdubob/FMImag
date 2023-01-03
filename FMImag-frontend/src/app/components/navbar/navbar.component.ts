@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { UserRole } from 'src/app/helper/user.roles';
 import { AuthenticationService } from 'src/app/services/login/authentication.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +11,8 @@ import { AuthenticationService } from 'src/app/services/login/authentication.ser
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(public authenticationService: AuthenticationService) { }
+  constructor(public authenticationService: AuthenticationService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.authenticationService.user.subscribe(u => {
@@ -41,5 +43,9 @@ export class NavbarComponent implements OnInit {
 
   get UserRole() {
     return UserRole;
+  }
+
+  navigateToLogin() {
+    this.router.navigateByUrl("/login");
   }
 }

@@ -21,7 +21,7 @@ namespace FMImag.Controllers
         }
 
         [HttpPost]
-        [AuthorizeRoles(UserRole.ADMIN)]
+        [AllowAnonymous]
         public async Task<ActionResult<UserEditDTO>> CreateUser(UserEditDTO user)
         {
             var existingUser = dbContext.Users.FirstOrDefault(usr => usr.Username == user.Username);

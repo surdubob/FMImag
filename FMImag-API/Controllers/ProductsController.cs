@@ -1,21 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FMImag.Helper;
+using FMImag.Model;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FMImag.Controllers
 {
     public class ProductsController : Controller
     {
+        private FmiDBContext dbContext;
+
+        public ProductsController(FmiDBContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
+
 
         /*
-        private bool ClientExists(int id)
-        {
-            return _context.Clients.Any(c => c.Id == id);
-        }
 
         [HttpGet("logo/{clientCode}")]
         [AllowAnonymous]
         public async Task<ActionResult<ImageResponse>> GetClientLogo(string clientCode)
         {
-            var path = await _context.Parameters.FirstOrDefaultAsync(p => p.Code == "ClientsIconsFolderPath");
+            var path = await dbContext.Parameters.FirstOrDefaultAsync(p => p.Code == "ClientsIconsFolderPath");
             if (path != null)
             {
                 var url = contentRoot + path.Value;
@@ -99,7 +105,7 @@ namespace FMImag.Controllers
         [CustomAuthorize(ROLETYPE.Site_admin, ROLETYPE.Admin)]
         public async Task<ActionResult<string>> UploadLogo(string clientCode, [FromBody] ImageResponse logo)
         {
-            var path = await _context.Parameters.FirstOrDefaultAsync(p => p.Code == "ClientsIconsFolderPath");
+            var path = await dbContext.Parameters.FirstOrDefaultAsync(p => p.Code == "ClientsIconsFolderPath");
             if (path == null)
             {
                 return Problem();

@@ -11,13 +11,13 @@ import {AddProductComponent} from "./components/add-product/add-product.componen
 
 
 const routes: Routes = [
-  { path: '',  component: HomeComponent, pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'products', component: ProductsComponent },
-  { path: 'product/:id', component: ViewProductComponent },
-  { path: 'add-product', component: AddProductComponent },
-  { path: 'cart', component: CartComponent },
+  { path: '',  component: HomeComponent, pathMatch: 'full', data: { no_sidenav: false } },
+  { path: 'login', component: LoginComponent, data: { no_sidenav: true } },
+  { path: 'register', component: RegisterComponent, data: { no_sidenav: true } },
+  { path: 'products', component: ProductsComponent, data: { no_sidenav: false } },
+  { path: 'product/:id', component: ViewProductComponent, data: { no_sidenav: false } },
+  { path: 'add-product', component: AddProductComponent, data: { no_sidenav: true } },
+  { path: 'cart', component: CartComponent, data: { no_sidenav: true } },
 
   // { path: 'dashboard/edit/:id', component: DashboardComponent, canActivate: [AuthGuard], data: { roles: [UserRole.Admin]} },
   // { path: 'users/view/:id', component: EditUserComponent, canActivate: [AuthGuard], data: { roles: [UserRole.Admin]}},

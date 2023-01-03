@@ -11,14 +11,14 @@
                         <div *ngIf="f['username'].errors['required']">{{'Login.UsernameRequired'}}</div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group mt-3">
                     <label for="password">Password</label>
                     <input id="password" type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
                     <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
                         <div *ngIf="f['password'].errors['required']">Password Required</div>
                     </div>
                 </div>
-                <button [disabled]="loading" class="btn btn-primary col-md-3">
+                <button [disabled]="loading" class="btn btn-primary col-md-3 mt-3">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                   Login
                 </button>
