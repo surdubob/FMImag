@@ -1,6 +1,8 @@
+<app-navbar></app-navbar>
+
 <div class="container shadow p-3 mt-3" style="border-radius: 5px; border: 1px solid lightgray;">
   <div class="row">
-    <div class="col-md-3 responsiveborder" *ngIf="user">
+    <div class="col-md-3 responsiveborder">
       <app-sidenav></app-sidenav>
     </div>
     <div [ngClass]="user ? 'col-md-9' : 'col-md'">

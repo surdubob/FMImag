@@ -18,6 +18,12 @@ import {SpinnerComponent} from "./components/spinner/spinner.component";
 import {WrapperSpinnerComponent} from "./components/wrapper-spinner/wrapper-spinner.component";
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { HomeComponent } from './components/home/home.component';
+import {NavbarComponent} from "./components/navbar/navbar.component";
+import { RegisterComponent } from './components/register/register.component';
+import { ProductsComponent } from './components/products/products.component';
+import { ViewProductComponent } from './components/view-product/view-product.component';
+import { AddProductComponent } from './components/add-product/add-product.component';
+import { CartComponent } from './components/cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +33,13 @@ import { HomeComponent } from './components/home/home.component';
     SpinnerComponent,
     WrapperSpinnerComponent,
     SidenavComponent,
-    HomeComponent
+    HomeComponent,
+    NavbarComponent,
+    RegisterComponent,
+    ProductsComponent,
+    ViewProductComponent,
+    AddProductComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,
