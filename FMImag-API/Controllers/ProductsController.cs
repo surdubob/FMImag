@@ -1,16 +1,50 @@
-﻿using FMImag.Helper;
+﻿using FMImag.DTOs;
 using FMImag.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FMImag.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ProductsController : Controller
     {
         private FmiDBContext dbContext;
 
+
         public ProductsController(FmiDBContext dbContext)
         {
             this.dbContext = dbContext;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Product>> GetProducts() {
+
+            return await dbContext.Products.ToListAsync();
+
+        }
+
+        [HttpGet("{category}")]
+        public async Task<IEnumerable<Product>> GetProductsByCategory(string category, [FromQuery] Dictionary<int, string> filter)
+        {
+            var allProducts = dbContext.Products.ToList();
+            var categories = dbContext.Categories.Where(c => c.Name == category).FirstOrDefault();
+
+            if (filter[0] != null)
+            {
+                var filters = dbContext.Filters.ToList();
+                foreach (var fil in filters)
+                {
+                    if (fil.Name == filter[0])
+                    {
+                        allProducts = (List<Product>)allProducts.Where(p => p.Category.Name == category);
+                    }
+                    
+                }
+                
+            }
+            return allProducts;
+
         }
 
 
