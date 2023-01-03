@@ -9,12 +9,11 @@
 <!--  </div>-->
 <!--</div>-->
 
-
 <div class="card" style="width: 18rem;" *ngFor="let tempProduct of products">
   <img class="card-img-top" src="..." alt="Card image cap">
   <div class="card-body">
     <h5 class="card-title">{{tempProduct.name}}</h5>
-    <p class="card-text">{{tempProduct.price}}</p>
+    <p class="card-text">{{tempProduct.price | currency: 'RON'}}</p>
     <a href="#" class="btn btn-primary">Details</a>
   </div>
 </div>
