@@ -1,1 +1,21 @@
-<p>products works!</p>
+<!--<div>-->
+<!--  <div>-->
+<!--    <label class="form-label">Min price</label>-->
+<!--    <input type="range" class="form-range">-->
+<!--  </div>-->
+<!--  <div>-->
+<!--    <label class="form-label">Max price</label>-->
+<!--    <input type="range" class="form-range">-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<div class="card" style="width: 18rem;" *ngFor="let tempProduct of products">
+  <img class="card-img-top" src="..." alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{tempProduct.name}}</h5>
+    <p class="card-text">{{tempProduct.price}}</p>
+    <a href="#" class="btn btn-primary">Details</a>
+  </div>
+</div>
+
