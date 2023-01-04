@@ -15,7 +15,7 @@ namespace FMImag.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpGet("getAllCategories")]
+        [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
             return Ok(dbContext.Categories);

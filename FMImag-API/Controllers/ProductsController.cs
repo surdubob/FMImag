@@ -31,7 +31,7 @@ namespace FMImag.Controllers
 
             foreach (string? p in paths)
             {
-                var url = contentRoot + Path.DirectorySeparatorChar + productImagesFolder +
+                var url = contentRoot + productImagesFolder +
                           Path.DirectorySeparatorChar;
                 if (Directory.Exists(url))
                 {
@@ -84,6 +84,35 @@ namespace FMImag.Controllers
             foreach (Product prod in products)
             {
                 responseDtos.Add(GetProductWithPicture(prod));
+            }
+            return responseDtos;
+        }
+
+        [HttpGet("/api/Product/{productId}")]
+        public async Task<ActionResult<ProductDTO>> GetProduct(string productId)
+        {
+            var product = dbContext.Products.Include(p => p.Category).Where(p => p.Id.ToString() == productId).FirstOrDefault();
+
+            if (product != null)
+            {
+                return GetProductWithPicture(product);
+            }
+
+            return null;
+        }
+
+        [HttpGet("TopProducts")]
+        public async Task<IEnumerable<ProductDTO>> GetTopProductFromCategories()
+        {
+            List<ProductDTO> responseDtos = new List<ProductDTO>();
+            var categories = await dbContext.Categories.ToListAsync();
+            foreach (var category in categories)
+            {
+                var product = dbContext.Products.Include(p => p.Category).OrderByDescending(p => p.UnitsSold).FirstOrDefault();
+                if (product != null)
+                {
+                    responseDtos.Add(GetProductWithPicture(product));
+                }
             }
             return responseDtos;
         }
