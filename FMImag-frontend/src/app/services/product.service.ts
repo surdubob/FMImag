@@ -18,3 +18,8 @@ export class ProductService {
   }
 }
 
+export interface ImageResponse {
+  content: string;
+  type: string;
+}
+

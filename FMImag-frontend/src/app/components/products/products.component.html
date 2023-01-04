@@ -10,7 +10,7 @@
 <!--</div>-->
 
 <div class="card" style="width: 18rem;" *ngFor="let tempProduct of products">
-  <img class="card-img-top" src="..." alt="Card image cap">
+  <img class="card-img-top" [src]="tempProduct.imagesSafe[0]" alt="Card image cap">
   <div class="card-body">
     <h5 class="card-title">{{tempProduct.name}}</h5>
     <p class="card-text">{{tempProduct.price | currency: 'RON'}}</p>

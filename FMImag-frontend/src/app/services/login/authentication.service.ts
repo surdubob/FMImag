@@ -77,8 +77,3 @@ export class AuthenticationService {
     clearTimeout(this.refreshTokenTimeout);
   }
 }
-
-export interface ImageResponse {
-  content: string;
-  type: string;
-}

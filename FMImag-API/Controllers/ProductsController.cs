@@ -1,4 +1,8 @@
-﻿using FMImag.DTOs;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using EmsDTOs;
+using FMImag.DTOs;
+using FMImag.Helper;
 using FMImag.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,18 +14,76 @@ namespace FMImag.Controllers
     public class ProductsController : Controller
     {
         private FmiDBContext dbContext;
+        private readonly string contentRoot;
+        private readonly string productImagesFolder = "ProductImages";
 
-
-        public ProductsController(FmiDBContext dbContext)
+        public ProductsController(FmiDBContext dbContext, IConfiguration configuration)
         {
             this.dbContext = dbContext;
+            contentRoot = configuration.GetValue<string>(WebHostDefaults.ContentRootKey);
+        }
+
+        private ProductDTO GetProductWithPicture(Product prod)
+        {
+            string?[] paths = JsonSerializer.Deserialize<string[]>(prod.ImagePaths);
+            List<ImageResponse> images = new List<ImageResponse>();
+
+            foreach (string? p in paths)
+            {
+                var url = contentRoot + Path.DirectorySeparatorChar + productImagesFolder +
+                          Path.DirectorySeparatorChar;
+                if (Directory.Exists(url))
+                {
+                    string[] fileEntries = Directory.GetFiles(url, p);
+                    foreach (string fileName in fileEntries)
+                    {
+
+                        string type = "";
+                        if (fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg"))
+                        {
+                            type = "jpg";
+                        }
+                        else if (fileName.EndsWith(".png"))
+                        {
+                            type = "png";
+                        }
+
+                        byte[] imageArray = System.IO.File.ReadAllBytes(fileName);
+                        string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+
+                        images.Add(new ImageResponse()
+                        {
+                            Content = base64ImageRepresentation,
+                            Type = type
+                        });
+                    }
+                }
+            }
+
+            return new ProductDTO
+            {
+                Id = prod.Id,
+                Images = images,
+                Category = prod.Category,
+                CategoryId = prod.CategoryId,
+                Description = prod.Description,
+                Name = prod.Name,
+                Price = prod.Price,
+                Stock = prod.Stock,
+                UnitsSold = prod.UnitsSold
+            };
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Product>> GetProducts() {
-
-            return await dbContext.Products.ToListAsync();
-
+        public async Task<IEnumerable<ProductDTO>> GetProducts() 
+        {
+            var products = await dbContext.Products.Include(p => p.Category).ToListAsync();
+            List<ProductDTO> responseDtos = new List<ProductDTO>();
+            foreach (Product prod in products)
+            {
+                responseDtos.Add(GetProductWithPicture(prod));
+            }
+            return responseDtos;
         }
 
         [HttpGet("{category}")]
@@ -48,132 +110,103 @@ namespace FMImag.Controllers
         }
 
 
-
-        /*
-
-        [HttpGet("logo/{clientCode}")]
+        [HttpGet("image/{productId}")]
         [AllowAnonymous]
-        public async Task<ActionResult<ImageResponse>> GetClientLogo(string clientCode)
+        public async Task<ActionResult<IEnumerable<ImageResponse>>> GetImagePictures(int productId)
         {
-            var path = await dbContext.Parameters.FirstOrDefaultAsync(p => p.Code == "ClientsIconsFolderPath");
+            var product = dbContext.Products.FirstOrDefault(p => p.Id == productId);
+            if (product == null)
+                return NotFound();
+
+            var path = product.ImagePaths;
             if (path != null)
             {
-                var url = contentRoot + path.Value;
-                if (Directory.Exists(url))
-                {
-                    string[] fileEntries = Directory.GetFiles(url, clientCode + "-logo*");
-                    foreach (string fileName in fileEntries)
-                    {
-                        if (fileName.Contains(clientCode))
-                        {
-                            if (fileName.EndsWith(".svg"))
-                            {
-                                FileStream fileStream = new FileStream(fileName, FileMode.Open);
-                                using (StreamReader reader = new StreamReader(fileStream))
-                                {
-                                    string content = reader.ReadToEnd().Replace('\n', ' ');
-                                    return Ok(new ImageResponse()
-                                    {
-                                        Content = content,
-                                        Type = "svg"
-                                    });
-                                }
-                            }
-                            else
-                            {
-                                string type = "";
-                                if (fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg"))
-                                {
-                                    type = "jpg";
-                                }
-                                else if (fileName.EndsWith(".png"))
-                                {
-                                    type = "png";
-                                }
-                                byte[] imageArray = System.IO.File.ReadAllBytes(fileName);
-                                string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+                string?[] paths = JsonSerializer.Deserialize<string[]>(path);
+                List<ImageResponse> images = new List<ImageResponse>();
 
-                                return Ok(new ImageResponse()
-                                {
-                                    Content = imageArray,
-                                    Type = type
-                                });
+                foreach (string? p in paths)
+                {
+                    var url = contentRoot + Path.DirectorySeparatorChar + productImagesFolder + Path.DirectorySeparatorChar;
+                    if (Directory.Exists(url))
+                    {
+                        string[] fileEntries = Directory.GetFiles(url, p);
+                        foreach (string fileName in fileEntries)
+                        {
+                            string type = "";
+                            if (fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg"))
+                            {
+                                type = "jpg";
                             }
+                            else if (fileName.EndsWith(".png"))
+                            {
+                                type = "png";
+                            }
+                            byte[] imageArray = System.IO.File.ReadAllBytes(fileName);
+                            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+
+                            images.Add(new ImageResponse()
+                            {
+                                Content = imageArray,
+                                Type = type
+                            });
                         }
                     }
                 }
+                return Ok(images);
             }
             return NotFound();
         }
-
-        // This method is used to save only jpg or png files!
-        private bool SaveLogoToDisk(ImageResponse logo, Parameter path, string clientCode)
+        
+        
+        private void SaveImageToDisk(IEnumerable<ImageResponse> images, string productCode)
         {
-            string extension = "";
-            if (logo.Content.ToString().Contains("jpg") || logo.Content.ToString().Contains("jpeg"))
+            int i = 1;
+            foreach (ImageResponse image in images)
             {
-                extension = "jpg";
-            }
-            else if (logo.Content.ToString().Contains("png"))
-            {
-                extension = "png";
-            }
-
-            byte[] bytes = Convert.FromBase64String(logo.Content.ToString().Split("base64,")[1]);
-
-            var url = contentRoot + path.Value;
-            if (Directory.Exists(url))
-            {
-                string[] fileEntries = Directory.GetFiles(url, clientCode + "-logo*");
-                foreach (string fileName in fileEntries)
+                string extension = "";
+                if (image.Content.ToString().Contains("jpg") || image.Content.ToString().Contains("jpeg"))
                 {
-                    System.IO.File.Delete(fileName);
+                    extension = "jpg";
                 }
-                System.IO.File.WriteAllBytes(url + "\\" + clientCode + "-logo." + extension, bytes);
-                return true;
+                else if (image.Content.ToString().Contains("png"))
+                {
+                    extension = "png";
+                }
+
+                byte[] bytes = Convert.FromBase64String(image.Content.ToString().Split("base64,")[1]);
+
+                var url = contentRoot + Path.DirectorySeparatorChar + productImagesFolder;
+                if (Directory.Exists(url))
+                {
+                    System.IO.File.WriteAllBytes(url + Path.DirectorySeparatorChar + productCode + (i++) + "." + extension, bytes);
+                }
             }
-            return false;
         }
 
-        [HttpPut("logo/{clientCode}")]
-        [CustomAuthorize(ROLETYPE.Site_admin, ROLETYPE.Admin)]
-        public async Task<ActionResult<string>> UploadLogo(string clientCode, [FromBody] ImageResponse logo)
+        [HttpPost("image/{productId}")]
+        [AuthorizeRoles(UserRole.ADMIN)]
+        public async Task<ActionResult<string>> UploadLogo(int productId, [FromBody] IEnumerable<ImageResponse> images)
         {
-            var path = await dbContext.Parameters.FirstOrDefaultAsync(p => p.Code == "ClientsIconsFolderPath");
+            var prod = dbContext.Products.FirstOrDefault(p => p.Id == productId);
+            if (prod == null)
+                return NotFound();
+
+            var path = contentRoot + Path.DirectorySeparatorChar + productImagesFolder;
             if (path == null)
             {
                 return Problem();
             }
 
-            if (logo != null && !string.IsNullOrEmpty(clientCode))
+            string productCode = prod.Name.ToLower().Replace(' ', '_');
+
+            if (images != null)
             {
-                if (logo.Type == "svg")
-                {
-                    string contentString = logo.Content.ToString().Split('"')[3].Split("base64,")[1];
-
-                    byte[] bytes = Convert.FromBase64String(contentString);
-
-                    var url = contentRoot + path.Value;
-                    if (Directory.Exists(url))
-                    {
-                        string[] fileEntries = Directory.GetFiles(url, clientCode + "-logo*");
-                        foreach (string fileName in fileEntries)
-                        {
-                            System.IO.File.Delete(fileName);
-                        }
-                        System.IO.File.WriteAllBytes(url + "\\" + clientCode + "-logo.svg", bytes);
-                        return Ok();
-                    }
-                }
-                else
-                {
-                    SaveLogoToDisk(logo, path, clientCode);
-                    return Ok();
-                }
+                SaveImageToDisk(images, productCode);
+                return Ok();
             }
 
             return Problem();
         }
-    */
+    
     }
 }
