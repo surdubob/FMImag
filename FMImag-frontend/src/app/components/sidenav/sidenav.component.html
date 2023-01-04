@@ -1,1 +1,7 @@
-<p>sidenav works!</p>
+<button class="btn btn-primary" (click)="clickEvent()">Toggle Menu</button>
+<div class="bg-light border-right" id="sidebar-wrapper" [ngClass]="status ? 'hide' : 'show'">
+  <div class="list-group list-group-flush">
+    <span class="list-group-item">Categories</span>
+    <a href="#" class="list-group-item list-group-item-action bg-light" *ngFor="let tempCategory of categories">{{tempCategory.name}}</a>
+  </div>
+</div>

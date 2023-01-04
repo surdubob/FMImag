@@ -13,8 +13,16 @@ export class ProductService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getProductList(){
+  getProductList() {
     return this.httpClient.get<Product[]>(this.baseUrl);
+  }
+
+  getTopProductList() {
+    return this.httpClient.get<Product[]>(this.baseUrl + "/TopProducts");
+  }
+
+  getProduct(productId: string) {
+    return this.httpClient.get<Product>(environment.apiUrl + "/product/" + productId);
   }
 }
 

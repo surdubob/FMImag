@@ -1,1 +1,8 @@
-<p>view-product works!</p>
+  <img class="card-img-top" [src]="product.imagesSafe[0]" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{product.name}}</h5>
+    <p class="card-text">{{product.price | currency: 'RON'}}</p>
+    <a href="#" class="btn btn-primary">Details</a>
+  </div>
+
+
