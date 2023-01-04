@@ -12,5 +12,6 @@
         public Category Category { get; set; }
 
         public string ImagePaths { get; set; } // ['...','...']
+        public string Specifications { get; set; } // json with specifications { "ram_capacity":"16GB" }
     }
 }

@@ -15,5 +15,6 @@ namespace FMImag.DTOs
         public Category Category { get; set; }
 
         public IList<ImageResponse> Images { get; set; }
+        public string Specifications { get; set; }
     }
 }

@@ -8,8 +8,6 @@ namespace FMImag.Model
         public string Name { get; set; }
         
         [JsonIgnore]
-        public virtual ICollection<Filter> Filters { get; set; }
-        [JsonIgnore]
         public virtual ICollection<Product> Products { get; set; }
     }
 }

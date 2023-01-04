@@ -3,6 +3,7 @@ using System;
 using FMImag.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FMImag.Migrations
 {
     [DbContext(typeof(FmiDBContext))]
-    partial class FmiDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230104130706_RemoveFilters")]
+    partial class RemoveFilters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,10 +59,6 @@ namespace FMImag.Migrations
 
                     b.Property<float>("Price")
                         .HasColumnType("float");
-
-                    b.Property<string>("Specifications")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");

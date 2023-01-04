@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using EmsDTOs;
 using FMImag.DTOs;
+using FMImag.Filters;
 using FMImag.Helper;
 using FMImag.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -70,7 +71,8 @@ namespace FMImag.Controllers
                 Name = prod.Name,
                 Price = prod.Price,
                 Stock = prod.Stock,
-                UnitsSold = prod.UnitsSold
+                UnitsSold = prod.UnitsSold,
+                Specifications = prod.Specifications
             };
         }
 
@@ -87,26 +89,39 @@ namespace FMImag.Controllers
         }
 
         [HttpGet("{category}")]
-        public async Task<IEnumerable<Product>> GetProductsByCategory(string category, [FromQuery] Dictionary<int, string> filter)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategory(string category, [FromQuery] Dictionary<string, string> filters)
         {
-            var allProducts = dbContext.Products;
-            var categories = await dbContext.Categories.Include(p => p.Filters).Where(c => c.Name == category).FirstOrDefaultAsync();
+            List<Product> allProducts = await dbContext.Products.ToListAsync();
 
-            if (filter[0] != null)
+            List<ProductFilter> productFilters = null;
+
+            switch (category)
             {
-                var filters = dbContext.Filters.Include(p => p.Categories).ToList();
-                foreach (var fil in filters)
-                {   
-                    if (fil.Categories.Contains(categories) && fil.Name == filter[0])
-                    {
-                        allProducts = (DbSet<Product>)allProducts.Where(p => p.CategoryId == categories.Id);
-                    }
-                    
-                }
-                
+                case "auto":
+                    productFilters = FilterHelper.getAutoFilters();
+                    break;
+                case "telefoane":
+                    productFilters = FilterHelper.getAutoFilters();
+                    break;
             }
-            return allProducts.ToList();
 
+            if (productFilters == null)
+            {
+                return StatusCode(500);
+            }
+
+            foreach (KeyValuePair<string, string> filter in filters)
+            {
+                foreach (var f in productFilters)
+                {
+                    if (filter.Key == f.Name)
+                    {
+                        allProducts = (List<Product>)f.ApplyFilter(allProducts, f.Name, new List<string>{filter.Value});
+                    }
+                }
+            }
+
+            return allProducts.ToList();
         }
 
 
