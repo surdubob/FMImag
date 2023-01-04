@@ -10,11 +10,8 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  products: Product[] = [];
 
-  constructor(private productService: ProductService,
-              private spinnerService: SpinnerService,
-              private sanitizer: DomSanitizer) { }
+  constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
     this.listProducts();
@@ -22,27 +19,10 @@ export class HomeComponent implements OnInit {
 
   listProducts()
   {
-    this.spinnerService.show();
-    this.productService.getTopProductList().subscribe(
-      data => {
-        this.products = data;
-        for(var p of this.products) {
-          p.imagesSafe = new Array<SafeHtml>();
-          for(var img of p.images) {
-            switch (img.type){
-              case 'png':
-                p.imagesSafe.push(this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,'
-                  + img.content));
-                break;
-              case 'jpg':
-                p.imagesSafe.push(this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,'
-                  + img.content));
-                break;
-            }
-          }
-        }
-        this.spinnerService.hide();
-      }
-    )
+    this.productService.getTopProductList();
+  }
+
+  topproducts() {
+    return this.productService.topProducts;
   }
 }
