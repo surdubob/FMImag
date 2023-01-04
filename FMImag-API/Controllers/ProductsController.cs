@@ -75,7 +75,7 @@ namespace FMImag.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProductDTO>> GetProducts() 
+        public async Task<IEnumerable<ProductDTO>> GetProducts()
         {
             var products = await dbContext.Products.Include(p => p.Category).ToListAsync();
             List<ProductDTO> responseDtos = new List<ProductDTO>();
@@ -96,14 +96,14 @@ namespace FMImag.Controllers
             {
                 var filters = dbContext.Filters.Include(p => p.Categories).ToList();
                 foreach (var fil in filters)
-                {   
+                {
                     if (fil.Categories.Contains(categories) && fil.Name == filter[0])
                     {
                         allProducts = (DbSet<Product>)allProducts.Where(p => p.CategoryId == categories.Id);
                     }
-                    
+
                 }
-                
+
             }
             return allProducts.ToList();
 
@@ -156,8 +156,8 @@ namespace FMImag.Controllers
             }
             return NotFound();
         }
-        
-        
+
+
         private void SaveImageToDisk(IEnumerable<ImageResponse> images, string productCode)
         {
             int i = 1;
@@ -207,6 +207,21 @@ namespace FMImag.Controllers
 
             return Problem();
         }
-    
+
+        [HttpGet("review/{productId}")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<Review>> GetProductReviews(int productId)
+        {
+            var allReviews = dbContext.Reviews.Where(r => r.ProductId == productId);
+            return allReviews;
+        }
+
+        [HttpPost("postReview")]
+        public async Task<ActionResult> UploadProductReview([FromBody] Review review)
+        {
+            dbContext.Reviews.Add(review);
+            dbContext.SaveChanges();
+            return Ok();
+        }
     }
 }

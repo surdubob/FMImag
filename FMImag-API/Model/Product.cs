@@ -9,6 +9,7 @@
         public int Stock { get; set; }
         public float Price { get; set; }
         public int CategoryId { get; set; }
+        public List<Review> Reviews { get; set; }
         public Category Category { get; set; }
 
         public string ImagePaths { get; set; } // ['...','...']
