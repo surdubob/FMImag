@@ -15,21 +15,10 @@ namespace FMImag.Controllers
             this.dbContext = dbContext;
         }
 
-        [HttpGet("getAllCategories")]
+        [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
             return Ok(dbContext.Categories);
-        }
-
-        [HttpGet("getFiltersOfCategoriy")]
-        public async Task<ActionResult<IEnumerable<Filter>>> GetFiltersOfCategory(string categoryName)
-        {
-            var cat = dbContext.Categories.FirstOrDefault(c => c.Name == categoryName); 
-            if (cat == null)
-            {
-                return NotFound();
-            }
-            return Ok(cat.Filters);
         }
 
     }
