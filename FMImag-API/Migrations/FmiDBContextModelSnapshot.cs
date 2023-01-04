@@ -121,6 +121,9 @@ namespace FMImag.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
@@ -132,6 +135,8 @@ namespace FMImag.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Reviews");
                 });
@@ -192,9 +197,23 @@ namespace FMImag.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FMImag.Model.Review", b =>
+                {
+                    b.HasOne("FMImag.Model.Product", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FMImag.Model.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("FMImag.Model.Product", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("FMImag.Model.User", b =>
