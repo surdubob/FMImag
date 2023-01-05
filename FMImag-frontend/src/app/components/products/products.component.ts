@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../services/product.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-products',
@@ -8,7 +9,8 @@ import {ProductService} from "../../services/product.service";
 })
 export class ProductsComponent implements OnInit{
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService,
+              private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.listProducts();
@@ -16,8 +18,21 @@ export class ProductsComponent implements OnInit{
 
   listProducts()
   {
-    this.productService.getProductList();
-  }
+    let path;
+    try {
+      path = this.activatedRoute.snapshot.url[1].path;
+    } catch (error) {
+      path = null;
+    }
+
+    console.log(path)
+    if (path == null) {
+      this.productService.getProductList();
+    } else
+      this.productService.getProductList(path);
+    }
+
+
 
   products() {
     return this.productService.products;

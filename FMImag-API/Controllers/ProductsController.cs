@@ -108,7 +108,7 @@ namespace FMImag.Controllers
             var categories = await dbContext.Categories.ToListAsync();
             foreach (var category in categories)
             {
-                var product = dbContext.Products.Include(p => p.Category).OrderByDescending(p => p.UnitsSold).FirstOrDefault();
+                var product = dbContext.Products.Include(p => p.Category).Where(p => p.CategoryId == category.Id).OrderByDescending(p => p.UnitsSold).FirstOrDefault();
                 if (product != null)
                 {
                     responseDtos.Add(GetProductWithPicture(product));
