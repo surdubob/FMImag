@@ -5,4 +5,96 @@
     <a href="#" class="btn btn-primary">Details</a>
   </div>
 
+  <div>
+    <form>
+      <div class="form-group">
+        <label class="col-sm-2 col-form-label">Title</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="inputEmail3" placeholder="Title" name="title" [(ngModel)]="review.title" >
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Your opinion on the product</label>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="body" [(ngModel)]="review.body"></textarea>
+      </div>
+      <fieldset class="form-group">
+        <div class="row">
+          <legend class="col-form-label col-sm-2 pt-0">Rating</legend>
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value=1 [(ngModel)]="review.rating">
+              <label class="form-check-label" for="gridRadios1">
+                1
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value=2 [(ngModel)]="review.rating">
+              <label class="form-check-label" for="gridRadios2">
+                2
+              </label>
+            </div>
+            <div class="form-check disabled">
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value=3 [(ngModel)]="review.rating">
+              <label class="form-check-label" for="gridRadios3">
+                3
+              </label>
+            </div>
+            <div class="form-check disabled">
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios4" value=4 [(ngModel)]="review.rating">
+              <label class="form-check-label" for="gridRadios4">
+                4
+              </label>
+            </div>
+            <div class="form-check disabled">
+              <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios5" value=5 [(ngModel)]="review.rating">
+              <label class="form-check-label" for="gridRadios5">
+                5
+              </label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">UserID</th>
+        <th scope="col">Review</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let r of reviewsShown">
+        <th scope="row">{{r.userId}}</th>
+        <td>
+          {{r.title}}
+          {{r.body}}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        (pageChange)="refreshCountries()"
+      >
+      </ngb-pagination>
+
+      <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+        <option [ngValue]="2">2 items per page</option>
+        <option [ngValue]="4">4 items per page</option>
+        <option [ngValue]="6">6 items per page</option>
+      </select>
+    </div>
+  </div>
 

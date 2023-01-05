@@ -263,6 +263,7 @@ namespace FMImag.Controllers
         [HttpPost("postReview")]
         public async Task<ActionResult> UploadProductReview([FromBody] Review review)
         {
+            review.Created = DateTime.Now;
             dbContext.Reviews.Add(review);
             dbContext.SaveChanges();
             return Ok();
