@@ -3,13 +3,16 @@
   <div class="list-group list-group-flush">
     <a href="/products" class="list-group-item list-group-item-action bg-light">Toate Produsele</a>
     <span class="list-group-item">Categories</span>
-    <a href="/products/{{tempCategory.name}}" class="list-group-item list-group-item-action bg-light" style="text-transform: capitalize;" *ngFor="let tempCategory of categories" (click)="categorySelected(tempCategory)">{{tempCategory.name}}</a>
+    <a href="/products/{{tempCategory.name}}" class="list-group-item list-group-item-action bg-light" style="text-transform: capitalize;" *ngFor="let tempCategory of categories">{{tempCategory.name}}</a>
   </div>
   <div *ngIf="filters">
     <div *ngFor="let f of filters">
       <span>{{f.name}}</span>
       <ul>
-        <li *ngFor="let opt of f.possibleChoicesList">{{opt}}</li>
+        <li *ngFor="let opt of f.possibleChoicesList">
+          <input type="checkbox" (click)="checkBoxClicked(opt, f.name, $event)">
+          {{opt}}
+        </li>
       </ul>
     </div>
   </div>
