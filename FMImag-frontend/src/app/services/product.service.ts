@@ -108,7 +108,7 @@ export class ProductService {
   }
 
   getProduct(productId: string) {
-    return this.httpClient.get<Product>(environment.apiUrl + "/product/" + productId)
+    return this.httpClient.get<Product>(environment.apiUrl + "/product/" + productId);
   }
 
 }

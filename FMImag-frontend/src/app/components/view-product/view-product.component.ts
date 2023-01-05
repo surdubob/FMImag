@@ -13,7 +13,7 @@ import {LocalStorageService} from "../../services/local-storage.service";
 })
 export class ViewProductComponent {
 
-  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0};
+  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0};
 
   localsStorage:  Array<string> = [];
 
@@ -40,7 +40,6 @@ export class ViewProductComponent {
             this.localsStorage.push(local);
           }
         }
-        this.localStore.clearData();
         this.localStore.saveData('size', size);
 
         for (var i = 0; i < this.localsStorage.length; i++ ){
@@ -75,5 +74,17 @@ export class ViewProductComponent {
         this.spinnerService.hide();
       }
     );
+  }
+
+  addToCart(productId: string) {
+    var cart = this.localStore.getData("cart");
+    var new_cart;
+    if (cart != null) {
+      new_cart = JSON.parse(cart);
+      new_cart.productId.push(productId);
+    } else {
+      new_cart = {"productId":[productId]};
+    }
+    this.localStore.saveData("cart", JSON.stringify(new_cart));
   }
 }
