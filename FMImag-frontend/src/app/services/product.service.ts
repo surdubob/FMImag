@@ -20,9 +20,9 @@ export class ProductService {
               private spinnerService: SpinnerService,
               private sanitizer: DomSanitizer) { }
 
-  getProductList() {
+  getProductList(categoryName?: string) {
     this.spinnerService.show();
-    return this.httpClient.get<Product[]>(this.baseUrl).subscribe(
+    return this.httpClient.get<Product[]>( categoryName == null ? this.baseUrl : this.baseUrl + "/" + categoryName).subscribe(
       data => {
         this.products = data;
         for(var p of this.products) {
@@ -71,7 +71,7 @@ export class ProductService {
   }
 
   getProduct(productId: string) {
-    return this.httpClient.get<Product>(environment.apiUrl + "/product/" + productId);
+    return this.httpClient.get<Product>(environment.apiUrl + "/product/" + productId)
   }
 
 }
