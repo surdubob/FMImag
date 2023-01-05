@@ -122,7 +122,7 @@ namespace FMImag.Controllers
         {
             List<Product> allProducts = await dbContext.Products.ToListAsync();
 
-            List<ProductFilter> productFilters = null;
+            List<StringProductFilter> productFilters = null;
 
             switch (category)
             {
@@ -266,6 +266,23 @@ namespace FMImag.Controllers
             dbContext.Reviews.Add(review);
             dbContext.SaveChanges();
             return Ok();
+        }
+
+        [HttpGet("getCategoryFilters/{category}")]
+        public async Task<ActionResult<IEnumerable<ProductFilter>>> GetCategoryFilters(string category)
+        {
+            category = category.ToLower();
+            List<StringProductFilter> productFilters = null;
+            switch (category)
+            {
+                case "auto":
+                    productFilters = FilterHelper.getAutoFilters();
+                    break;
+                case "telefoane":
+                    productFilters = FilterHelper.getAutoFilters();
+                    break;
+            }
+            return Ok(productFilters);
         }
     }
 }

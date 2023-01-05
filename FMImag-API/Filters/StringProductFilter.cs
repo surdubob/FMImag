@@ -6,8 +6,10 @@ namespace FMImag.Filters
 {
     public class StringProductFilter : ProductFilter
     {
-        public StringProductFilter(string name) : base(name)
+        public IList<string> PossibleChoicesList { get; set; }
+        public StringProductFilter(string name, IList<string> possibleChoices = null) : base(name)
         {
+            PossibleChoicesList = possibleChoices;
         }
 
         public override IList<Product> ApplyFilter(IList<Product> products, string propertyName, IList<string> selectedChoices = null)
@@ -29,7 +31,6 @@ namespace FMImag.Filters
                     }
                 }
 
-                
             }
             return productsList;
         }
