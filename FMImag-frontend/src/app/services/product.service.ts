@@ -73,6 +73,7 @@ export class ProductService {
   getProduct(productId: string) {
     return this.httpClient.get<Product>(environment.apiUrl + "/product/" + productId);
   }
+
 }
 
 export interface ImageResponse {
