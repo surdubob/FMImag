@@ -7,12 +7,31 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {ReviewService} from "../../services/review.service";
 import  {Review} from "../../dto/review";
-import { NgbPaginationModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-view-product',
   templateUrl: './view-product.component.html',
-  styleUrls: ['./view-product.component.css']
+  styleUrls: ['./view-product.component.css'],
+  styles: [
+    `
+			i {
+				position: relative;
+				display: inline-block;
+				font-size: 2.5rem;
+				padding-right: 0.1rem;
+				color: #d3d3d3;
+			}
+
+			.filled {
+				color: goldenrod;
+				overflow: hidden;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+		`,
+  ],
 })
 export class ViewProductComponent implements OnInit{
 
@@ -20,12 +39,13 @@ export class ViewProductComponent implements OnInit{
 
   localsStorage:  Array<string> = [];
 
-  review: Review = {userId: 0, productId: 0, body: "", rating: 0, title: "", created: new Date()}
+  review: Review = {userId: 0, userName:"", productId: 0, body: "", rating: 0, title: "", created: new Date()}
   reviews: Review[] = [];
   reviewsShown: Review[] = [];
   page = 1;
   pageSize = 4;
   collectionSize = 0;
+  currentRating = 0;
 
   constructor(private localStore: LocalStorageService,
               private productService: ProductService,
@@ -63,17 +83,26 @@ export class ViewProductComponent implements OnInit{
       this.localStore.saveData('size', "1");
       this.localStore.saveData('0', productId);
     }
-    this.reviewService.getAllReviewsForCurrentProduct(1).subscribe(data => {
+    this.reviewService.getAllReviewsForCurrentProduct(parseInt(productId)).subscribe(data => {
       this.reviews = data;
+      console.log(data);
       this.collectionSize = data.length;
-      this.refreshCountries();
+      this.refreshReviews();
+      let s = 0;
+      for (let r of this.reviews) {
+        s = s + r.rating;
+      }
+      this.currentRating = s/this.reviews.length;
     })
+
   }
 
   onSubmit(): void {
     this.review.productId = this.product.id;
     this.review.userId = 1;
-    this.reviewService.addReview(this.review).subscribe(u => {console.log(u);});
+    this.reviewService.addReview(this.review).subscribe(u => {
+      console.log(u);
+      window.location.reload();});
   }
 
   productInfo() {
@@ -110,11 +139,10 @@ export class ViewProductComponent implements OnInit{
     }
     this.localStore.saveData("cart", JSON.stringify(new_cart));
   }
-  refreshCountries() {
-    this.reviewsShown = this.reviews.map((country, i) => ({ id: i + 1, ...country })).slice(
+  refreshReviews() {
+    this.reviewsShown = this.reviews.map((review, i) => ({ id: i + 1, ...review })).slice(
       (this.page - 1) * this.pageSize,
       (this.page - 1) * this.pageSize + this.pageSize,
     );
   }
-
 }

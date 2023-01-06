@@ -42,8 +42,8 @@ export class SidenavComponent implements OnInit {
 
               try {
                 path = evt.url.substring(evt.url.lastIndexOf('/') + 1);
-                // console.log(path);
-                if (path != null && path != 'products') {
+                // console.log(evt.url);
+                if (path != null && path != 'products' && evt.url.startsWith('/products')) {
                   this.selectedCategory = this.categories.find(c => c.name.toLowerCase() == path!.toString().toLowerCase());
 
                   this.getCategoryFilters();
@@ -89,6 +89,7 @@ export class SidenavComponent implements OnInit {
       (el as HTMLInputElement).checked = false;
     });
     this.checkedOptions.clear();
+    this.productService.searchTerm = "";
     this.productService.getFilteredProductList(this.selectedCategory!.name!, this.checkedOptions);
   }
 }

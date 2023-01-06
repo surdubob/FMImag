@@ -14,13 +14,11 @@ export class ReviewService {
   constructor(private httpClient: HttpClient) { }
 
   addReview(review: Review){
-    console.log(review)
     return this.httpClient.post<Review>(this.baseUrl + "/postReview", review);
   }
 
   getAllReviewsForCurrentProduct(productId: number) {
     return this.httpClient.get<Review[]>(this.baseUrl + "/review/" + productId.toString());
-
   }
 
 }
