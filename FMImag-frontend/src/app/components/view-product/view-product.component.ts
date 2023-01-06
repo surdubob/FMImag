@@ -83,7 +83,7 @@ export class ViewProductComponent implements OnInit{
       this.localStore.saveData('size', "1");
       this.localStore.saveData('0', productId);
     }
-    this.reviewService.getAllReviewsForCurrentProduct(1).subscribe(data => {
+    this.reviewService.getAllReviewsForCurrentProduct(parseInt(productId)).subscribe(data => {
       this.reviews = data;
       console.log(data);
       this.collectionSize = data.length;
