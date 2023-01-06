@@ -271,10 +271,25 @@ namespace FMImag.Controllers
 
         [HttpGet("review/{productId}")]
         [AllowAnonymous]
-        public async Task<IEnumerable<Review>> GetProductReviews(int productId)
+        public async Task<IEnumerable<ReviewDTO>> GetProductReviews(int productId)
         {
-            var allReviews = dbContext.Reviews.Where(r => r.ProductId == productId);
-            return allReviews;
+            var allReviews = dbContext.Reviews.Where(r => r.ProductId == productId).ToList();
+            var reviewDTOs = new List<ReviewDTO>();
+            foreach(var r in allReviews)
+            {
+                reviewDTOs.Add(new ReviewDTO
+                {
+                    Id = r.Id,
+                    ProductId = r.ProductId,
+                    UserId = r.UserId,
+                    Title = r.Title,
+                    Body = r.Body,
+                    Rating = r.Rating,
+                    Created = r.Created,
+                    UserName = dbContext.Users.FirstOrDefault(u => u.Id == r.UserId).Username
+                });
+            }
+            return reviewDTOs;
         }
 
         [HttpPost("postReview")]

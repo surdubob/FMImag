@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AppRoutingModule} from "./app-routing.module";
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModule, NgbRatingModule} from "@ng-bootstrap/ng-bootstrap";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {AuthenticationService} from "./services/login/authentication.service";
 import {CookieService} from "ngx-cookie-service";
@@ -24,6 +24,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { ViewProductComponent } from './components/view-product/view-product.component';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { CartComponent } from './components/cart/cart.component';
+import {NgIf} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -49,6 +50,8 @@ import { CartComponent } from './components/cart/cart.component';
     FormsModule,
     ReactiveFormsModule,
     FontAwesomeModule,
+    NgbRatingModule,
+    NgIf
   ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthenticationService, CookieService] },
