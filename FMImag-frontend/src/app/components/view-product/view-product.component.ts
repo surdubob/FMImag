@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {Product} from "../../dto/product";
 import {ImageResponse, ProductService} from "../../services/product.service";
 import {SpinnerService} from "../../services/spinner/spinner.service";
@@ -13,6 +13,7 @@ import {NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstra
   selector: 'app-view-product',
   templateUrl: './view-product.component.html',
   styleUrls: ['./view-product.component.css'],
+  encapsulation: ViewEncapsulation.None,
   styles: [
     `
 			i {

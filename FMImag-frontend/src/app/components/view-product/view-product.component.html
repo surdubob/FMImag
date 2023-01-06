@@ -1,103 +1,119 @@
-  <img class="card-img-top" style="width: 300px" [src]="product.imagesSafe[0]" alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">{{product.name}}</h5>
-    <p class="card-text">{{product.price | currency: 'RON'}}</p>
-    <a href="/cart" class="btn btn-primary" (click)="addToCart(product.id.toString())" *ngIf="product.stock > 0; else elseBlock">Add to cart</a>
-    <ng-template #elseBlock>
-      <div class="alert alert-danger" role="alert">
-        Out of Stock!
-      </div>
-    </ng-template>
-  </div>
-
-  <div style="margin-top: 5vh">
-    <h3>Add a review</h3>
-
-    <form>
-      <div class="form-group">
-        <label class="col-sm-2 col-form-label">Title</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control" id="inputEmail3" placeholder="Title" [required]="true" name="title" [(ngModel)]="review.title" >
+<div class="justify-content-center d-flex">
+  <div style="width: 45%; padding: 20px">
+    <ngb-carousel *ngIf="product.imagesSafe">
+      <ng-template ngbSlide *ngFor="let pic of product.imagesSafe" style="max-height: 350px; max-width: 350px">
+        <div class="picsum-img-wrapper">
+          <img [src]="pic" alt="Random first slide" style="width: 100%"/>
         </div>
-      </div>
-      <div class="form-group">
-        <label>Your opinion on the product</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="body" [required]="true" [(ngModel)]="review.body"></textarea>
-      </div>
-      <fieldset class="form-group">
-        <div class="row">
-          <legend class="col-form-label col-sm-2 pt-0">Rating</legend>
-          <div class="col-sm-10">
-            <ng-template #t let-fill="fill">
-              <i class="bi-star-fill">
-                <i *ngIf="fill > 0" class="bi-star-fill filled" [style.width.%]="fill"></i>
-              </i>
-            </ng-template>
-            <ngb-rating [(rate)]="review.rating" [max]="5" [starTemplate]="t"></ngb-rating>
-            <hr />
-          </div>
-        </div>
-      </fieldset>
-      <div class="form-group row">
-        <div class="col-sm-10">
-          <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
-        </div>
-      </div>
-    </form>
+      </ng-template>
+    </ngb-carousel>
   </div>
+</div>
 
-  <div style="margin-top: 3vh">
-    <h3>Current Rating</h3>
-    <ng-template #t let-fill="fill">
-      <i class="bi-star-fill">
-        <i *ngIf="fill > 0" class="bi-star-fill filled" [style.width.%]="fill"></i>
-      </i>
-    </ng-template>
-    <ngb-rating [rate]="currentRating" [readonly]="true" [max]="5" [starTemplate]="t"></ngb-rating>
-    <hr />
-    <pre>Rate: <b>{{currentRating.toPrecision(2)}}</b></pre>
-  </div>
+<!--<img class="card-img-top" style="width: 300px" [src]="product.imagesSafe[0]" alt="Card image cap">-->
 
-  <div style="margin-top: 3vh">
-    <h3>People thoughts on this product</h3>
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th scope="col" style="width: 20vw">User</th>
-        <th scope="col">Review</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let r of reviewsShown">
-        <th scope="row">
-          <div>{{r.userName}}</div>
-          <div>Posted on: {{r.created | date:'medium'}}</div>
-        </th>
-        <td>
-          <div>Rating: {{r.rating}}</div>
-          <div style="font-weight: bold">{{r.title}}</div>
-          <div>{{r.body}}</div>
-
-
-        </td>
-      </tr>
-      </tbody>
-    </table>
-
-    <div class="d-flex justify-content-between p-2">
-      <ngb-pagination
-        [collectionSize]="collectionSize"
-        [(page)]="page"
-        [pageSize]="pageSize"
-        (pageChange)="refreshReviews()"
-      >
-      </ngb-pagination>
-
-      <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshReviews()">
-        <option [ngValue]="2">2 items per page</option>
-        <option [ngValue]="4">4 items per page</option>
-        <option [ngValue]="6">6 items per page</option>
-      </select>
+<div class="card-body">
+  <h5 class="card-title">{{product.name}}</h5>
+  <p class="card-text">{{product.price | currency: 'RON'}}</p>
+  <a href="/cart" class="btn btn-primary" (click)="addToCart(product.id.toString())"
+     *ngIf="product.stock > 0; else elseBlock">Add to cart</a>
+  <ng-template #elseBlock>
+    <div class="alert alert-danger" role="alert">
+      Out of Stock!
     </div>
+  </ng-template>
+</div>
+
+<div style="margin-top: 5vh">
+  <h3>Add a review</h3>
+
+  <form>
+    <div class="form-group">
+      <label class="col-sm-2 col-form-label">Title</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="inputEmail3" placeholder="Title" [required]="true" name="title"
+               [(ngModel)]="review.title">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Your opinion on the product</label>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="body" [required]="true"
+                [(ngModel)]="review.body"></textarea>
+    </div>
+    <fieldset class="form-group">
+      <div class="row">
+        <legend class="col-form-label col-sm-2 pt-0">Rating</legend>
+        <div class="col-sm-10">
+          <ng-template #t let-fill="fill">
+            <i class="bi-star-fill">
+              <i *ngIf="fill > 0" class="bi-star-fill filled" [style.width.%]="fill"></i>
+            </i>
+          </ng-template>
+          <ngb-rating [(rate)]="review.rating" [max]="5" [starTemplate]="t"></ngb-rating>
+          <hr/>
+        </div>
+      </div>
+    </fieldset>
+    <div class="form-group row">
+      <div class="col-sm-10">
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div style="margin-top: 3vh">
+  <h3>Current Rating</h3>
+  <ng-template #t let-fill="fill">
+    <i class="bi-star-fill">
+      <i *ngIf="fill > 0" class="bi-star-fill filled" [style.width.%]="fill"></i>
+    </i>
+  </ng-template>
+  <ngb-rating [rate]="currentRating" [readonly]="true" [max]="5" [starTemplate]="t"></ngb-rating>
+  <hr/>
+  <pre>Rate: <b>{{currentRating.toPrecision(2)}}</b></pre>
+</div>
+
+<div style="margin-top: 3vh">
+  <h3>People thoughts on this product</h3>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col" style="width: 20vw">User</th>
+      <th scope="col">Review</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let r of reviewsShown">
+      <th scope="row">
+        <div>{{r.userName}}</div>
+        <div>Posted on: {{r.created | date:'medium'}}</div>
+      </th>
+      <td>
+        <div>Rating: {{r.rating}}</div>
+        <div style="font-weight: bold">{{r.title}}</div>
+        <div>{{r.body}}</div>
+
+
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+      [collectionSize]="collectionSize"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      (pageChange)="refreshReviews()"
+    >
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshReviews()">
+      <option [ngValue]="2">2 items per page</option>
+      <option [ngValue]="4">4 items per page</option>
+      <option [ngValue]="6">6 items per page</option>
+    </select>
   </div>
+</div>
 
