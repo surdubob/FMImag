@@ -8,7 +8,7 @@
   <div *ngIf="filters">
     <div *ngFor="let f of filters">
       <span>{{f.name}}</span>
-      <ul>
+      <ul style="list-style-type: none;">
         <li *ngFor="let opt of f.possibleChoicesList">
           <input type="checkbox" (click)="checkBoxClicked(opt, f.name, $event)">
           {{opt}}
