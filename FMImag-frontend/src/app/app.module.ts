@@ -24,6 +24,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { ViewProductComponent } from './components/view-product/view-product.component';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { CartComponent } from './components/cart/cart.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { CartComponent } from './components/cart/cart.component';
     ProductsComponent,
     ViewProductComponent,
     AddProductComponent,
-    CartComponent
+    CartComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

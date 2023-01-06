@@ -19,7 +19,6 @@ export class ReviewService {
   }
 
   getAllReviewsForCurrentProduct(productId: number) {
-    console.log(productId.toString());
     return this.httpClient.get<Review[]>(this.baseUrl + "/review/" + productId.toString());
 
   }

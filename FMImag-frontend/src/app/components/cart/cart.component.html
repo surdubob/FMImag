@@ -5,10 +5,11 @@
   <div class="card-body">
     <h5 class="card-title">{{tempProduct.name}}</h5>
     <p class="card-text">{{tempProduct.price | currency: 'RON'}}</p>
-    <a href="/cart" class="btn btn-danger" (click)="deleteProduct(tempProduct.id.toString())">Delete</a>
+    <p class="card-text">Quantity {{productCount.get(tempProduct.id.toString())}}</p>
+    <a href="/cart" class="btn btn-danger" (click)="deleteProduct(tempProduct.id.toString())" >Delete</a>
   </div>
 </div>
-  <a href="/" class="btn btn-primary" (click)="deleteProduct()">Finish Shopping</a>
+  <a class="btn btn-primary" (click)="finishCard()" (click)="openModal()">Finish Shopping</a>
 </ng-container>
 <ng-template #elseBlock>
   <div class="alert alert-warning" role="alert">

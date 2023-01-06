@@ -5,6 +5,9 @@ import {SpinnerService} from "../../services/spinner/spinner.service";
 import {ActivatedRoute} from "@angular/router";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {Product} from "../../dto/product";
+import {CartService} from "../../services/cart.service";
+import {ModalComponent} from "../modal/modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-cart',
@@ -15,7 +18,11 @@ export class CartComponent implements OnInit{
 
   product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0};
   products: Product[] = []
+
+  productCount: Map<any, any> = new Map()
   constructor(private productService: ProductService,
+              private cartService: CartService,
+              private modalService: NgbModal,
               private localStore: LocalStorageService,
               private spinnerService: SpinnerService,
               private activatedRoute: ActivatedRoute,
@@ -25,6 +32,10 @@ export class CartComponent implements OnInit{
     this.cartProducts();
   }
 
+  openModal() {
+    const modalRef = this.modalService.open(ModalComponent);
+  }
+
   cartProducts(){
     var cart_json = this.localStore.getData("cart");
     var cart;
@@ -32,6 +43,11 @@ export class CartComponent implements OnInit{
       cart = JSON.parse(cart_json);
       console.log(cart);
       for (var productId of cart.productId) {
+        if (this.productCount.has(productId)) {
+          this.productCount.set(productId, Number(this.productCount.get(productId)) + 1);
+        } else {
+          this.productCount.set(productId, 1);
+        }
         this.productService.getProduct(productId).subscribe(
           data => {
             this.product = data;
@@ -48,12 +64,20 @@ export class CartComponent implements OnInit{
                   break;
               }
             }
-            this.products.push(this.product);
+            if (this.products.length > 0) {
+              for (var productsItem of this.products) {
+                if (productsItem.id != this.product.id) {
+                  this.products.push(this.product);
+                }
+              }
+            } else {
+              this.products.push(this.product);
+            }
           }
         )
       }
     }
-    console.log(this.products.length)
+    console.log(this.products)
     return this.products;
   }
 
@@ -76,5 +100,17 @@ export class CartComponent implements OnInit{
     } else {
       this.localStore.removeData("cart");
     }
+  }
+
+  finishCard() {
+    var cart_json = this.localStore.getData("cart");
+    var cart;
+    if (cart_json != null) {
+      cart = JSON.parse(cart_json);
+    }
+    for(var product of cart.productId) {
+      this.cartService.updateCart(product).subscribe();
+    }
+    this.localStore.removeData("cart");
   }
 }
