@@ -1,8 +1,24 @@
-<div class="card" style="width: 18rem;" *ngFor="let tempProduct of products">
-  <img class="card-img-top" [src]="tempProduct.imagesSafe[0]" alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">{{tempProduct.name}}</h5>
-    <p class="card-text">{{tempProduct.price | currency: 'RON'}}</p>
-    <a href="#" class="btn btn-primary">Details</a>
+<h3>Top Products by Category</h3>
+<div class="row">
+  <div class="card col-3" style="width: 18rem;" *ngFor="let tempProduct of topproducts()">
+    <img class="card-img-top" [src]="tempProduct.imagesSafe[0]" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{tempProduct.name}}</h5>
+      <p class="card-text">{{tempProduct.price | currency: 'RON'}}</p>
+      <a href="/product/{{tempProduct.id}}" class="btn btn-primary">Details</a>
+    </div>
   </div>
+</div>
+<h3>Last Products Visited</h3>
+<div class="row">
+  <ng-container class="col-3" style="width: 18rem;" *ngFor="let tempProduct of products()">
+  <div class="card col-3" style="width: 18rem;" *ngIf="localsStorage.includes(tempProduct.id.toString())">
+      <img class="card-img-top" [src]="tempProduct.imagesSafe[0]" alt="Card image cap">
+      <div class="card-body" *ngIf="tempProduct">
+        <h5 class="card-title">{{tempProduct.name}}</h5>
+        <p class="card-text">{{tempProduct.price | currency: 'RON'}}</p>
+        <a href="/product/{{tempProduct.id}}" class="btn btn-primary">Details</a>
+      </div>
+    </div>
+  </ng-container>
 </div>

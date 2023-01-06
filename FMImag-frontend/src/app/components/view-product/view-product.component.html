@@ -1,8 +1,13 @@
-  <img class="card-img-top" [src]="product.imagesSafe[0]" alt="Card image cap">
+  <img class="card-img-top" style="width: 300px" [src]="product.imagesSafe[0]" alt="Card image cap">
   <div class="card-body">
     <h5 class="card-title">{{product.name}}</h5>
     <p class="card-text">{{product.price | currency: 'RON'}}</p>
-    <a href="#" class="btn btn-primary">Details</a>
+    <a href="/cart" class="btn btn-primary" (click)="addToCart(product.id.toString())" *ngIf="product.stock > 0; else elseBlock">Add to cart</a>
+    <ng-template #elseBlock>
+      <div class="alert alert-danger" role="alert">
+        Out of Stock!
+      </div>
+    </ng-template>
   </div>
 
   <div>

@@ -5,13 +5,12 @@ namespace FMImag.Helper
 {
     public class FilterHelper
     {
-        public static List<ProductFilter> getAutoFilters()
+        public static List<StringProductFilter> getAutoFilters()
         {
-            List<ProductFilter> filters = new List<ProductFilter>();
+            List<StringProductFilter> filters = new List<StringProductFilter>();
 
-            filters.Add(new StringProductFilter("Subcategorie"));
-            filters.Add(new StringProductFilter("Diametru"));
-            filters.Add(new StringProductFilter("Material"));
+            filters.Add(new StringProductFilter("Diametru", new List<string>{"17\"", "18\"", "19\""}));
+            filters.Add(new StringProductFilter("Material", new List<string>{"Tabla", "Aliaj"}));
             
             return filters;
         }

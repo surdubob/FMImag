@@ -15,6 +15,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, data: { no_sidenav: true } },
   { path: 'register', component: RegisterComponent, data: { no_sidenav: true } },
   { path: 'products', component: ProductsComponent, data: { no_sidenav: false } },
+  { path: 'products/:id', component: ProductsComponent, data: { no_sidenav: false } },
   { path: 'product/:id', component: ViewProductComponent, data: { no_sidenav: false } },
   { path: 'add-product', component: AddProductComponent, data: { no_sidenav: true } },
   { path: 'cart', component: CartComponent, data: { no_sidenav: true } },

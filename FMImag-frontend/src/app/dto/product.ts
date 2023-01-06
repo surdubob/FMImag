@@ -6,6 +6,7 @@ export interface Product{
   name: string;
   price: number;
   details: string;
+  stock: number;
   images: ImageResponse[];
   imagesSafe: SafeHtml[];
 }

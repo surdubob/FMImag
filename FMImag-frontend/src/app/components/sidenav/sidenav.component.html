@@ -1,7 +1,20 @@
 <button class="btn btn-primary" (click)="clickEvent()">Toggle Menu</button>
 <div class="bg-light border-right" id="sidebar-wrapper" [ngClass]="status ? 'hide' : 'show'">
   <div class="list-group list-group-flush">
+    <a href="/products" class="list-group-item list-group-item-action bg-light">Toate Produsele</a>
     <span class="list-group-item">Categories</span>
-    <a href="#" class="list-group-item list-group-item-action bg-light" *ngFor="let tempCategory of categories">{{tempCategory.name}}</a>
+    <a href="/products/{{tempCategory.name}}" class="list-group-item list-group-item-action bg-light" style="text-transform: capitalize;" *ngFor="let tempCategory of categories">{{tempCategory.name}}</a>
+  </div>
+  <div *ngIf="filters">
+    <div *ngFor="let f of filters">
+      <span>{{f.name}}</span>
+      <ul style="list-style-type: none;">
+        <li *ngFor="let opt of f.possibleChoicesList">
+          <input type="checkbox" (click)="checkBoxClicked(opt, f.name, $event)">
+          {{opt}}
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
+

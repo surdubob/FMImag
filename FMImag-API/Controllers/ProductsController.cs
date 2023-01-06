@@ -108,7 +108,7 @@ namespace FMImag.Controllers
             var categories = await dbContext.Categories.ToListAsync();
             foreach (var category in categories)
             {
-                var product = dbContext.Products.Include(p => p.Category).OrderByDescending(p => p.UnitsSold).FirstOrDefault();
+                var product = dbContext.Products.Include(p => p.Category).Where(p => p.CategoryId == category.Id).OrderByDescending(p => p.UnitsSold).FirstOrDefault();
                 if (product != null)
                 {
                     responseDtos.Add(GetProductWithPicture(product));
@@ -117,12 +117,18 @@ namespace FMImag.Controllers
             return responseDtos;
         }
 
-        [HttpGet("{category}")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategory(string category, [FromQuery] Dictionary<string, string> filters)
+        private string removeNumbers(string text)
         {
+            return text.Remove(text.IndexOfAny("0123456789".ToCharArray()));
+        }
+
+        [HttpGet("{category}")]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProductsByCategory(string category, [FromQuery] Dictionary<string, string> filters)
+        {
+            category = category.ToLower();
             List<Product> allProducts = await dbContext.Products.ToListAsync();
 
-            List<ProductFilter> productFilters = null;
+            List<StringProductFilter> productFilters = null;
 
             switch (category)
             {
@@ -139,18 +145,29 @@ namespace FMImag.Controllers
                 return StatusCode(500);
             }
 
+            var returnedProducts = new List<Product>();
             foreach (KeyValuePair<string, string> filter in filters)
             {
                 foreach (var f in productFilters)
                 {
-                    if (filter.Key == f.Name)
+                    if (removeNumbers(filter.Key) == f.Name)
                     {
-                        allProducts = (List<Product>)f.ApplyFilter(allProducts, f.Name, new List<string>{filter.Value});
+                        returnedProducts = returnedProducts.Concat((List<Product>)f.ApplyFilter(allProducts, f.Name, new List<string>{filter.Value})).ToList();
                     }
                 }
             }
 
-            return allProducts.ToList();
+            if (filters.Count == 0)
+            {
+                returnedProducts = allProducts;
+            }
+
+            List<ProductDTO> responseDtos = new List<ProductDTO>();
+            foreach (Product prod in returnedProducts)
+            {
+                responseDtos.Add(GetProductWithPicture(prod));
+            }
+            return responseDtos;
         }
 
 
@@ -267,6 +284,23 @@ namespace FMImag.Controllers
             dbContext.Reviews.Add(review);
             dbContext.SaveChanges();
             return Ok();
+        }
+
+        [HttpGet("getCategoryFilters/{category}")]
+        public async Task<ActionResult<IEnumerable<ProductFilter>>> GetCategoryFilters(string category)
+        {
+            category = category.ToLower();
+            List<StringProductFilter> productFilters = null;
+            switch (category)
+            {
+                case "auto":
+                    productFilters = FilterHelper.getAutoFilters();
+                    break;
+                case "telefoane":
+                    productFilters = FilterHelper.getAutoFilters();
+                    break;
+            }
+            return Ok(productFilters);
         }
     }
 }
