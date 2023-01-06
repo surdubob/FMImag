@@ -19,6 +19,7 @@ export class ProductService {
   pageSize = 4;
 
   private baseUrl = environment.apiUrl + "/products"
+  searchTerm: string = "";
 
   constructor(private httpClient: HttpClient,
               private spinnerService: SpinnerService,
@@ -51,7 +52,13 @@ export class ProductService {
   }
 
   refreshProducts() {
-    this.productsShown = this.products.map((product, i) => ({ ...product })).slice(
+    let filteredProducts = this.products;
+    if (this.searchTerm.length > 0) {
+      filteredProducts = this.products.filter(p => {
+        return p.name.toLowerCase().includes(this.searchTerm.toLowerCase());
+      });
+    }
+    this.productsShown = filteredProducts.map((product, i) => ({ ...product })).slice(
       (this.currentPage - 1) * this.pageSize,
       (this.currentPage - 1) * this.pageSize + this.pageSize,
     );
