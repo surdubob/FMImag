@@ -10,11 +10,14 @@
       <span>{{f.name}}</span>
       <ul style="list-style-type: none;">
         <li *ngFor="let opt of f.possibleChoicesList">
-          <input type="checkbox" (click)="checkBoxClicked(opt, f.name, $event)">
+          <input class="filtercheckbox" type="checkbox" (click)="checkBoxClicked(opt, f.name, $event)">
           {{opt}}
         </li>
       </ul>
     </div>
+  </div>
+  <div>
+    <button class="btn btn-outline-primary" (click)="clearFilters()">Clear filters</button>
   </div>
 </div>
 

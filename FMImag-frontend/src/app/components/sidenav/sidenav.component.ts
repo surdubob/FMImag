@@ -83,4 +83,12 @@ export class SidenavComponent implements OnInit {
     }
     this.productService.getFilteredProductList(this.selectedCategory!.name!, this.checkedOptions);
   }
+
+  clearFilters() {
+    Array.from(document.getElementsByClassName("filtercheckbox")).forEach(el => {
+      (el as HTMLInputElement).checked = false;
+    });
+    this.checkedOptions.clear();
+    this.productService.getFilteredProductList(this.selectedCategory!.name!, this.checkedOptions);
+  }
 }

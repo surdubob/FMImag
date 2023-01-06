@@ -12,7 +12,11 @@ import {SpinnerService} from "./spinner/spinner.service";
 export class ProductService {
 
   products: Product[] = [];
+  productsShown: Product[] = [];
   topProducts: Product[] = [];
+
+  currentPage = 1;
+  pageSize = 4;
 
   private baseUrl = environment.apiUrl + "/products"
 
@@ -40,8 +44,16 @@ export class ProductService {
             }
           }
         }
+        this.refreshProducts();
         this.spinnerService.hide();
       }
+    );
+  }
+
+  refreshProducts() {
+    this.productsShown = this.products.map((product, i) => ({ ...product })).slice(
+      (this.currentPage - 1) * this.pageSize,
+      (this.currentPage - 1) * this.pageSize + this.pageSize,
     );
   }
 
@@ -77,6 +89,7 @@ export class ProductService {
             }
           }
         }
+        this.refreshProducts();
         this.spinnerService.hide();
       }
     );

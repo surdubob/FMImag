@@ -36,8 +36,12 @@ export class ProductsComponent implements OnInit{
   }
 
 
-
   products() {
     return this.productService.products;
   }
+
+  prodService() {
+    return this.productService;
+  }
+
 }
