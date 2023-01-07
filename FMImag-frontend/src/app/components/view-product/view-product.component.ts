@@ -8,6 +8,7 @@ import {LocalStorageService} from "../../services/local-storage.service";
 import {ReviewService} from "../../services/review.service";
 import  {Review} from "../../dto/review";
 import {NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
+import {AuthenticationService} from "../../services/login/authentication.service";
 
 @Component({
   selector: 'app-view-product',
@@ -47,17 +48,20 @@ export class ViewProductComponent implements OnInit{
   pageSize = 4;
   collectionSize = 0;
   currentRating = 0;
+  status = false;
 
   constructor(private localStore: LocalStorageService,
               private productService: ProductService,
               private reviewService: ReviewService,
               private spinnerService: SpinnerService,
               private activatedRoute: ActivatedRoute,
-              private sanitizer: DomSanitizer) {
+              private sanitizer: DomSanitizer,
+              public authenticate: AuthenticationService) {
   }
 
   ngOnInit(): void {
     this.productInfo();
+    this.checkIfProductIsFavorite();
     console.log(this.localsStorage.length);
     let productId = this.activatedRoute.snapshot.url[1].path;
     let size = this.localStore.getData('size');
@@ -104,6 +108,23 @@ export class ViewProductComponent implements OnInit{
     this.reviewService.addReview(this.review).subscribe(u => {
       console.log(u);
       window.location.reload();});
+  }
+
+  checkIfProductIsFavorite() {
+    let productId = this.activatedRoute.snapshot.url[1].path;
+    //TODO userId dinamic
+    let userId = this.authenticate.userValue?.id;
+    this.productService.getIfProductIsFavorite(Number(userId), Number(productId)).subscribe( response => {
+      console.log(response)
+       if (response != null) {
+         this.status = true;
+       } else {
+         this.status = false;
+       }
+    });
+  }
+  statusFav(status:boolean){
+    this.status = status
   }
 
   productInfo() {

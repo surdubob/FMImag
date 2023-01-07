@@ -13,8 +13,14 @@
 <!--<img class="card-img-top" style="width: 300px" [src]="product.imagesSafe[0]" alt="Card image cap">-->
 
 <div class="card-body">
-  <h5 class="card-title">{{product.name}}</h5>
+  <h5 class="card-title">{{product.name}} </h5>
   <p class="card-text">{{product.price | currency: 'RON'}}</p>
+  <div *ngIf="this.authenticate.userValue?.id != null">
+  <a (click)="statusFav(false)" *ngIf="status; else elseFav" class=""><i class="bi bi-heart-fill"></i></a>
+  <ng-template #elseFav>
+    <a (click)="statusFav(true)" class=""><i class="bi bi-heart"></i></a>
+  </ng-template>
+  </div>
   <a href="/cart" class="btn btn-primary" (click)="addToCart(product.id.toString())"
      *ngIf="product.stock > 0; else elseBlock">Add to cart</a>
   <ng-template #elseBlock>

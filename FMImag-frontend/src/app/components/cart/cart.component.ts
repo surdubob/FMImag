@@ -43,11 +43,13 @@ export class CartComponent implements OnInit{
       cart = JSON.parse(cart_json);
       console.log(cart);
       for (var productId of cart.productId) {
+
         if (this.productCount.has(productId)) {
           this.productCount.set(productId, Number(this.productCount.get(productId)) + 1);
         } else {
           this.productCount.set(productId, 1);
         }
+
         this.productService.getProduct(productId).subscribe(
           data => {
             this.product = data;
@@ -65,10 +67,14 @@ export class CartComponent implements OnInit{
               }
             }
             if (this.products.length > 0) {
+              var isProductAlreadyInCart = false;
               for (var productsItem of this.products) {
-                if (productsItem.id != this.product.id) {
-                  this.products.push(this.product);
+                if (productsItem.id == this.product.id) {
+                  isProductAlreadyInCart = true;
                 }
+              }
+              if (!isProductAlreadyInCart) {
+                this.products.push(this.product);
               }
             } else {
               this.products.push(this.product);

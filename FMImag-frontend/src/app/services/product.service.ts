@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {filter, map, Observable} from "rxjs";
 import {Product} from "../dto/product";
 import {environment} from "../../environment";
@@ -129,6 +129,10 @@ export class ProductService {
 
   getProduct(productId: string) {
     return this.httpClient.get<Product>(environment.apiUrl + "/product/" + productId);
+  }
+
+  getIfProductIsFavorite(userId: number, productId: number) {
+    return this.httpClient.get(this.baseUrl + "/favorite/" + userId + "/" + productId);
   }
 
 }

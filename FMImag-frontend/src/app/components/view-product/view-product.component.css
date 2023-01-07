@@ -2,3 +2,11 @@
 .carousel-control-prev-icon {
   filter: invert(1);
 }
+
+.bi-heart {
+  color: red;
+}
+
+.bi-heart-fill {
+  color: red;
+}
