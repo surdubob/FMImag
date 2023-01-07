@@ -69,7 +69,9 @@
           },
           "defaultConfiguration": "development",
           "options": {
-
+            "ssl": true,
+            "sslCert": "ssl/server.crt",
+            "sslKey": "ssl/server.key"
           }
         },
         "extract-i18n": {
