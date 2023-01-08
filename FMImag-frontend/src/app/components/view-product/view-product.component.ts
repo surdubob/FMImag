@@ -37,7 +37,7 @@ import {AuthenticationService} from "../../services/login/authentication.service
 })
 export class ViewProductComponent implements OnInit{
 
-  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0};
+  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, oldPrice: 0, stock: 0};
 
   localsStorage:  Array<string> = [];
 
@@ -112,10 +112,8 @@ export class ViewProductComponent implements OnInit{
 
   checkIfProductIsFavorite() {
     let productId = this.activatedRoute.snapshot.url[1].path;
-    //TODO userId dinamic
     let userId = this.authenticate.userValue?.id;
     this.productService.getIfProductIsFavorite(Number(userId), Number(productId)).subscribe( response => {
-      console.log(response)
        if (response != null) {
          this.status = true;
        } else {
@@ -125,6 +123,15 @@ export class ViewProductComponent implements OnInit{
   }
   statusFav(status:boolean){
     this.status = status
+    let productId = this.activatedRoute.snapshot.url[1].path;
+    let userId = this.authenticate.userValue?.id;
+    console.log()
+    if(this.status == true) {
+      this.productService.addProductToFavorite(Number(userId), Number(productId)).subscribe();
+    } else {
+      this.productService.removeProductToFavorite(Number(userId), Number(productId)).subscribe();
+    }
+
   }
 
   productInfo() {
