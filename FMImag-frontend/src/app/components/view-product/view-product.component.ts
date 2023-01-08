@@ -174,4 +174,8 @@ export class ViewProductComponent implements OnInit{
       (this.page - 1) * this.pageSize + this.pageSize,
     );
   }
+
+  deleteProduct() {
+    this.productService.deleteProduct(Number(this.activatedRoute.snapshot.url[1].path)).subscribe()
+  }
 }

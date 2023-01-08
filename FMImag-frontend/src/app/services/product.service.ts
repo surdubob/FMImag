@@ -149,6 +149,9 @@ export class ProductService {
     return this.httpClient.post(this.baseUrl + "/removefavorite/" + userId + "/" + productId, null);
   }
 
+  deleteProduct(userId: number) {
+    return this.httpClient.post(this.baseUrl + "/deleteProduct/" + userId, null);
+  }
 }
 
 export interface ImageResponse {
