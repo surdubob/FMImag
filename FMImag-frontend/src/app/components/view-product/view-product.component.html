@@ -1,3 +1,5 @@
+<h2 class="">{{product.name}}</h2>
+
 <div class="justify-content-center d-flex">
   <div style="width: 45%; padding: 20px">
     <ngb-carousel *ngIf="product.imagesSafe">
@@ -12,10 +14,10 @@
 
 <!--<img class="card-img-top" style="width: 300px" [src]="product.imagesSafe[0]" alt="Card image cap">-->
 
-<div class="card-body">
-  <h5 class="card-title">{{product.name}}</h5>
+<div class="">
+
   <p class="card-text">{{product.price | currency: 'RON'}}</p>
-  <a href="/cart" class="btn btn-primary" (click)="addToCart(product.id.toString())"
+  <a href="/cart" class="btn btn-success" (click)="addToCart(product.id.toString())"
      *ngIf="product.stock > 0; else elseBlock">Add to cart</a>
   <ng-template #elseBlock>
     <div class="alert alert-danger" role="alert">
@@ -24,54 +26,71 @@
   </ng-template>
 </div>
 
+<div>
+  <table *ngIf="product.specificationsDict" style="border: 1px solid lightgrey">
+    <tr *ngFor="let k of product.specificationsDict.keys()">
+      <td style="border: 1px solid lightgrey">
+        {{k}}
+      </td>
+      <td style="border: 1px solid lightgrey">
+        {{product.specificationsDict.get(k)}}
+      </td>
+    </tr>
+  </table>
+</div>
+
 <div style="margin-top: 5vh">
   <h3>Add a review</h3>
 
   <form>
     <div class="form-group">
       <label class="col-sm-2 col-form-label">Title</label>
-      <div class="col-sm-10">
-        <input type="text" class="form-control" id="inputEmail3" placeholder="Title" [required]="true" name="title"
+      <div>
+        <input type="text" class="form-control w-100" id="inputEmail3" placeholder="Title" [required]="true" name="title"
                [(ngModel)]="review.title">
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group mt-3">
       <label>Your opinion on the product</label>
-      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="body" [required]="true"
+      <textarea class="form-control w-100" id="exampleFormControlTextarea1" rows="3" name="body" [required]="true"
                 [(ngModel)]="review.body"></textarea>
     </div>
-    <fieldset class="form-group">
+    <fieldset class="form-group mt-3">
       <div class="row">
-        <legend class="col-form-label col-sm-2 pt-0">Rating</legend>
-        <div class="col-sm-10">
-          <ng-template #t let-fill="fill">
-            <i class="bi-star-fill">
-              <i *ngIf="fill > 0" class="bi-star-fill filled" [style.width.%]="fill"></i>
-            </i>
-          </ng-template>
-          <ngb-rating [(rate)]="review.rating" [max]="5" [starTemplate]="t"></ngb-rating>
-          <hr/>
-        </div>
+        <label class="">Rating</label>
+        <ng-template #t let-fill="fill">
+          <i class="bi-star-fill">
+            <i *ngIf="fill > 0" class="bi-star-fill filled" [style.width.%]="fill"></i>
+          </i>
+        </ng-template>
+        <ngb-rating [(rate)]="review.rating" [max]="5" [starTemplate]="t"></ngb-rating>
       </div>
     </fieldset>
     <div class="form-group row">
       <div class="col-sm-10">
-        <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+        <button type="submit" class="btn btn-outline-primary" (click)="onSubmit()">Submit Review</button>
       </div>
     </div>
   </form>
 </div>
-
-<div style="margin-top: 3vh">
-  <h3>Current Rating</h3>
-  <ng-template #t let-fill="fill">
-    <i class="bi-star-fill">
-      <i *ngIf="fill > 0" class="bi-star-fill filled" [style.width.%]="fill"></i>
-    </i>
-  </ng-template>
-  <ngb-rating [rate]="currentRating" [readonly]="true" [max]="5" [starTemplate]="t"></ngb-rating>
-  <hr/>
-  <pre>Rate: <b>{{currentRating.toPrecision(2)}}</b></pre>
+<hr/>
+<div>
+  <table>
+    <tr>
+      <td>
+        <span>Current Rating</span>
+      </td>
+      <td>
+        <ng-template #t let-fill="fill">
+          <i class="bi-star-fill smol">
+            <i *ngIf="fill > 0" class="bi-star-fill filled smol" [style.width.%]="fill"></i>
+          </i>
+        </ng-template>
+        <ngb-rating [rate]="currentRating" [readonly]="true" [max]="5" [starTemplate]="t"
+                    style="transform: scale(0.5);"></ngb-rating>
+      </td>
+    </tr>
+  </table>
 </div>
 
 <div style="margin-top: 3vh">
@@ -93,8 +112,6 @@
         <div>Rating: {{r.rating}}</div>
         <div style="font-weight: bold">{{r.title}}</div>
         <div>{{r.body}}</div>
-
-
       </td>
     </tr>
     </tbody>

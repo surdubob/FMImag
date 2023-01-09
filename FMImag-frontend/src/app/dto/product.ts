@@ -9,4 +9,6 @@ export interface Product{
   stock: number;
   images: ImageResponse[];
   imagesSafe: SafeHtml[];
+  specifications: string;
+  specificationsDict: Map<string, string>;
 }

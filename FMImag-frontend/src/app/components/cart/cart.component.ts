@@ -16,7 +16,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class CartComponent implements OnInit{
 
-  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0};
+  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0, specifications: "", specificationsDict: new Map<string, string>()};
   products: Product[] = []
 
   productCount: Map<any, any> = new Map()

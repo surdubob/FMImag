@@ -8,6 +8,7 @@ import {LocalStorageService} from "../../services/local-storage.service";
 import {ReviewService} from "../../services/review.service";
 import  {Review} from "../../dto/review";
 import {NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
+import {faNormalizeIconSpec} from "@fortawesome/angular-fontawesome/shared/utils/normalize-icon-spec.util";
 
 @Component({
   selector: 'app-view-product',
@@ -15,28 +16,11 @@ import {NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./view-product.component.css'],
   encapsulation: ViewEncapsulation.None,
   styles: [
-    `
-			i {
-				position: relative;
-				display: inline-block;
-				font-size: 2.5rem;
-				padding-right: 0.1rem;
-				color: #d3d3d3;
-			}
-
-			.filled {
-				color: goldenrod;
-				overflow: hidden;
-				position: absolute;
-				top: 0;
-				left: 0;
-			}
-		`,
   ],
 })
 export class ViewProductComponent implements OnInit{
 
-  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0};
+  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0, specifications: "", specificationsDict: new Map<string, string>()};
 
   localsStorage:  Array<string> = [];
 
@@ -86,7 +70,6 @@ export class ViewProductComponent implements OnInit{
     }
     this.reviewService.getAllReviewsForCurrentProduct(parseInt(productId)).subscribe(data => {
       this.reviews = data;
-      console.log(data);
       this.collectionSize = data.length;
       this.refreshReviews();
       let s = 0;
@@ -109,21 +92,23 @@ export class ViewProductComponent implements OnInit{
   productInfo() {
     this.spinnerService.show();
     this.productService.getProduct(this.activatedRoute.snapshot.url[1].path).subscribe(
-      data => {
+    data => {
         this.product = data;
-          this.product.imagesSafe = new Array<SafeHtml>();
-          for (var img of this.product.images) {
-            switch (img.type) {
-              case 'png':
-                this.product.imagesSafe.push(this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,'
-                  + img.content));
-                break;
-              case 'jpg':
-                this.product.imagesSafe.push(this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,'
-                  + img.content));
-                break;
-            }
+        console.log(this.product);
+        this.product.imagesSafe = new Array<SafeHtml>();
+        this.product.specificationsDict = new Map(Object.entries(JSON.parse(data.specifications)));
+        for (var img of this.product.images) {
+          switch (img.type) {
+            case 'png':
+              this.product.imagesSafe.push(this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,'
+                + img.content));
+              break;
+            case 'jpg':
+              this.product.imagesSafe.push(this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,'
+                + img.content));
+              break;
           }
+        }
         this.spinnerService.hide();
       }
     );

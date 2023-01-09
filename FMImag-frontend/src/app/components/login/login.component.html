@@ -2,7 +2,7 @@
     <div *ngIf="error" class="alert alert-danger mb-2">{{error}}</div>
     <div class="card">
         <h4 class="card-header">Login to continue</h4>
-        <div class="card-body">
+        <div class="card-body p-4">
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
                     <label for="username">Username</label>
@@ -23,6 +23,7 @@
                   Login
                 </button>
             </form>
+          <a routerLink="/register">Don't have an account? Register!</a>
         </div>
     </div>
 </div>
