@@ -5,6 +5,7 @@ export interface Product{
   id: number;
   name: string;
   price: number;
+  oldPrice: number;
   details: string;
   stock: number;
   images: ImageResponse[];

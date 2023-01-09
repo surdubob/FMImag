@@ -14,9 +14,15 @@
 
 <!--<img class="card-img-top" style="width: 300px" [src]="product.imagesSafe[0]" alt="Card image cap">-->
 
-<div class="">
-
+<div class="card-body">
   <p class="card-text">{{product.price | currency: 'RON'}}</p>
+  <p class="card-text" *ngIf="product.price < product.oldPrice"><s>{{product.oldPrice | currency: 'RON'}}</s></p>
+  <div *ngIf="this.authenticate.userValue?.id != null">
+  <a (click)="statusFav(false)" *ngIf="status; else elseFav" class=""><i class="bi bi-heart-fill"></i></a>
+  <ng-template #elseFav>
+    <a (click)="statusFav(true)" class=""><i class="bi bi-heart"></i></a>
+  </ng-template>
+  </div>
   <a href="/cart" class="btn btn-success" (click)="addToCart(product.id.toString())"
      *ngIf="product.stock > 0; else elseBlock">Add to cart</a>
   <ng-template #elseBlock>
@@ -24,6 +30,8 @@
       Out of Stock!
     </div>
   </ng-template>
+
+  <a href="/" class="btn btn-primary" (click)="deleteProduct()">Delete Product</a>
 </div>
 
 <div>

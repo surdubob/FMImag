@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {filter, map, Observable} from "rxjs";
 import {Product} from "../dto/product";
 import {environment} from "../../environment";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {SpinnerService} from "./spinner/spinner.service";
+import {FavoriteProduct} from "../dto/favoriteProduct";
+import {AuthenticationService} from "./login/authentication.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,6 @@ export class ProductService {
   products: Product[] = [];
   productsShown: Product[] = [];
   topProducts: Product[] = [];
-
   currentPage = 1;
   pageSize = 4;
 
@@ -23,6 +24,7 @@ export class ProductService {
 
   constructor(private httpClient: HttpClient,
               private spinnerService: SpinnerService,
+              public authenticate: AuthenticationService,
               private sanitizer: DomSanitizer) { }
 
   getProductList(categoryName?: string) {
@@ -131,6 +133,25 @@ export class ProductService {
     return this.httpClient.get<Product>(environment.apiUrl + "/product/" + productId);
   }
 
+  getFavoriteProducts(userId: number) {
+    return this.httpClient.get<Product[]>(this.baseUrl + "/favorite/" + userId)
+  }
+
+  getIfProductIsFavorite(userId: number, productId: number) {
+    return this.httpClient.get(this.baseUrl + "/favorite/" + userId + "/" + productId);
+  }
+
+  addProductToFavorite(userId: number, productId: number) {
+    return this.httpClient.post(this.baseUrl + "/addfavorite/" + userId + "/" + productId, null);
+  }
+
+  removeProductToFavorite(userId: number, productId: number) {
+    return this.httpClient.post(this.baseUrl + "/removefavorite/" + userId + "/" + productId, null);
+  }
+
+  deleteProduct(userId: number) {
+    return this.httpClient.post(this.baseUrl + "/deleteProduct/" + userId, null);
+  }
 }
 
 export interface ImageResponse {

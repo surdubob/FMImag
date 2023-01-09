@@ -9,6 +9,7 @@ import {ReviewService} from "../../services/review.service";
 import  {Review} from "../../dto/review";
 import {NgbPaginationModule, NgbTypeaheadModule} from '@ng-bootstrap/ng-bootstrap';
 import {faNormalizeIconSpec} from "@fortawesome/angular-fontawesome/shared/utils/normalize-icon-spec.util";
+import {AuthenticationService} from "../../services/login/authentication.service";
 
 @Component({
   selector: 'app-view-product',
@@ -20,7 +21,7 @@ import {faNormalizeIconSpec} from "@fortawesome/angular-fontawesome/shared/utils
 })
 export class ViewProductComponent implements OnInit{
 
-  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0, specifications: "", specificationsDict: new Map<string, string>()};
+  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0, specifications: "", oldPrice: 0, specificationsDict: new Map<string, string>()};
 
   localsStorage:  Array<string> = [];
 
@@ -31,17 +32,20 @@ export class ViewProductComponent implements OnInit{
   pageSize = 4;
   collectionSize = 0;
   currentRating = 0;
+  status = false;
 
   constructor(private localStore: LocalStorageService,
               private productService: ProductService,
               private reviewService: ReviewService,
               private spinnerService: SpinnerService,
               private activatedRoute: ActivatedRoute,
-              private sanitizer: DomSanitizer) {
+              private sanitizer: DomSanitizer,
+              public authenticate: AuthenticationService) {
   }
 
   ngOnInit(): void {
     this.productInfo();
+    this.checkIfProductIsFavorite();
     console.log(this.localsStorage.length);
     let productId = this.activatedRoute.snapshot.url[1].path;
     let size = this.localStore.getData('size');
@@ -89,6 +93,30 @@ export class ViewProductComponent implements OnInit{
       window.location.reload();});
   }
 
+  checkIfProductIsFavorite() {
+    let productId = this.activatedRoute.snapshot.url[1].path;
+    let userId = this.authenticate.userValue?.id;
+    this.productService.getIfProductIsFavorite(Number(userId), Number(productId)).subscribe( response => {
+       if (response != null) {
+         this.status = true;
+       } else {
+         this.status = false;
+       }
+    });
+  }
+  statusFav(status:boolean){
+    this.status = status
+    let productId = this.activatedRoute.snapshot.url[1].path;
+    let userId = this.authenticate.userValue?.id;
+    console.log()
+    if(this.status == true) {
+      this.productService.addProductToFavorite(Number(userId), Number(productId)).subscribe();
+    } else {
+      this.productService.removeProductToFavorite(Number(userId), Number(productId)).subscribe();
+    }
+
+  }
+
   productInfo() {
     this.spinnerService.show();
     this.productService.getProduct(this.activatedRoute.snapshot.url[1].path).subscribe(
@@ -130,5 +158,9 @@ export class ViewProductComponent implements OnInit{
       (this.page - 1) * this.pageSize,
       (this.page - 1) * this.pageSize + this.pageSize,
     );
+  }
+
+  deleteProduct() {
+    this.productService.deleteProduct(Number(this.activatedRoute.snapshot.url[1].path)).subscribe()
   }
 }
