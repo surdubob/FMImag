@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit {
   navbarOpen = false;
 
   toggleNavbar() {
-    this.navbarOpen = !this.navbarOpen;
+    this.authenticationService.modifyNavbarStatus()
   }
 
 

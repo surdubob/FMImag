@@ -1,5 +1,8 @@
-<button class="btn btn-primary" (click)="clickEvent()">Toggle Menu</button>
-<div class="bg-light border-right" id="sidebar-wrapper" [ngClass]="status ? 'hide' : 'show'">
+<div>
+<!--  <button class="btn btn-primary toggle-menu" (click)="clickEvent()">Toggle Menu</button>-->
+</div>
+
+<div class="bg-light border-right" id="sidebar-wrapper" [ngClass]="authenticationService.status ? 'hide' : 'show'">
   <div class="list-group list-group-flush">
     <a href="/products" class="list-group-item list-group-item-action bg-light">Toate Produsele</a>
     <span class="list-group-item">Categories</span>

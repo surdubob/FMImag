@@ -1,5 +1,6 @@
 <nav class="navbar navbar-dark bg-dark px-4" style="padding-top: 4px; padding-bottom: 4px;">
   <div>
+    <button class="btn btn-primary toggle-menu" (click)="toggleNavbar()">Toggle Menu</button>
     <a routerLink="/">
       <img src="../../../assets/FmiMag.png"
            alt="" height="50px" class="mr-2" style=" padding: 3px; border-radius: 3px;">
@@ -18,12 +19,13 @@
 
   <div>
     <ul class="navbar-nav mr-2">
-
       <li class="nav-item" *ngIf="user">
+        <a href="/cart" class="nav-link btn d-inline-block mx-2" style="color: white; border: none" >Cart</a>
         <button class="nav-link btn d-inline-block mx-2" style="color: white; border: none" disabled>{{user.username}}</button>
         <button class="nav-link btn d-inline-block mx-2" (click)="logout()">Log Out</button>
       </li>
       <li class="nav-item" *ngIf="!user" (click)="navigateToLogin()">
+        <a href="/cart" class="nav-link btn d-inline-block mx-2" style="color: white; border: none" >Cart</a>
         <button class="nav-link btn">Log In</button>
       </li>
     </ul>

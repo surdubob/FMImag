@@ -1,5 +1,4 @@
 #sidebar-wrapper {
-  min-height: 100vh;
   margin-left: -15rem;
   -webkit-transition: margin .25s ease-out;
   -moz-transition: margin .25s ease-out;
@@ -24,6 +23,8 @@
   margin-left: 0;
 }
 
+
+
 @media (min-width: 768px) {
   #sidebar-wrapper {
     margin-left: 0;
@@ -40,15 +41,22 @@
   .hide
   {
     margin-left: -15rem!important;
+    margin-right: 30rem!important;
   }
 }
 @media (max-width: 767px) {
+  .toggle-menu {
+    width: 100%;
+    margin-bottom: 10px;
+  }
   .show
   {
-    margin-left: -15rem!important;
+    margin-top: -20rem!important;
+    margin-left: 0!important;
   }
   .hide
   {
-    margin-left: -0!important;
+    margin-top: 0!important;
+    margin-left: 0!important;
   }
 }
