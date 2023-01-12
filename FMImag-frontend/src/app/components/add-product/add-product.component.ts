@@ -4,6 +4,7 @@ import {Product} from "../../dto/product";
 import {CategoryService} from "../../services/category.service";
 import {Category} from "../../dto/category";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-add-product',
@@ -18,7 +19,8 @@ export class AddProductComponent implements OnInit{
   public selectedCategory: Category | null = null;
 
   constructor(public productService: ProductService,
-              public categoryService: CategoryService) {
+              public categoryService: CategoryService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -34,6 +36,7 @@ export class AddProductComponent implements OnInit{
     }
     this.productService.createNewProduct(this.currentProduct).subscribe(data => {
       console.log(data);
+      this.router.navigateByUrl('/products');
     });
   }
 

@@ -33,3 +33,7 @@ i.smol {
 .bi-heart-fill {
   color: red;
 }
+
+tr.stripe:nth-child(even) {
+  background-color: #dddddd;
+}

@@ -34,13 +34,17 @@
   <a class="btn btn-danger mx-2" (click)="deleteProduct()" *ngIf="authenticate.userValue && authenticate.userValue.role == 1">Delete Product</a>
 </div>
 
-<div class="m-2">
-  <table *ngIf="product.specificationsDict" style="border: 1px solid lightgrey">
-    <tr *ngFor="let k of product.specificationsDict.keys()">
-      <td style="border: 1px solid lightgrey">
+<div class="m-3">
+  <table *ngIf="product.specificationsDict" style="border: 1px solid lightgrey; border-collapse: collapse; width: 50%">
+    <tr>
+      <th style="text-align: left; padding: 8px;">Specification</th>
+      <th style="text-align: left; padding: 8px;">Value</th>
+    </tr>
+    <tr *ngFor="let k of product.specificationsDict.keys()" class="stripe">
+      <td style="border: 1px solid lightgrey; text-align: left; padding: 8px;">
         {{k}}
       </td>
-      <td style="border: 1px solid lightgrey">
+      <td style="border: 1px solid lightgrey; text-align: left; padding: 8px;">
         {{product.specificationsDict.get(k)}}
       </td>
     </tr>
