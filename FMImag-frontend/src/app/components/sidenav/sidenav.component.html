@@ -1,26 +1,31 @@
-<div>
-<!--  <button class="btn btn-primary toggle-menu" (click)="clickEvent()">Toggle Menu</button>-->
-</div>
 
-<div class="border-right" id="sidebar-wrapper" [ngClass]="authenticationService.status ? 'hide' : 'show'">
-  <div class="list-group list-group-flush">
-    <a href="/products" class="list-group-item list-group-item-action bg-light">All Products</a>
-    <span class="list-group-item" style="font-weight: bold">Categories</span>
-    <a href="/products/{{tempCategory.name}}" class="list-group-item list-group-item-action" style="text-transform: capitalize;" *ngFor="let tempCategory of categories">{{tempCategory.name}}</a>
-  </div>
-  <div *ngIf="filters">
-    <div *ngFor="let f of filters">
-      <span>{{f.name}}</span>
-      <ul style="list-style-type: none;">
-        <li *ngFor="let opt of f.possibleChoicesList">
-          <input class="filtercheckbox" type="checkbox" (click)="checkBoxClicked(opt, f.name, $event)">
-          {{opt}}
-        </li>
-      </ul>
+<div id="sidebar-wrapper" [ngClass]="authenticationService.status ? 'hide' : 'show'">
+  <div class="p-2">
+    <div style="border: 1px solid lightgrey; border-radius: 5px;">
+      <div class="list-group list-group-flush w-100" >
+        <a href="/products" class="list-group-item list-group-item-action bg-light"> <i class="bi bi-bag"></i> All Products</a>
+        <span class="list-group-item" style="font-weight: bold"><i class="bi bi-tags"></i> Categories</span>
+        <div class="list-group-item list-group-item-action">
+          <a href="/products/{{tempCategory.name}}" style="text-transform: capitalize; text-decoration: none; color: black" class="mx-3"
+             *ngFor="let tempCategory of categories"><i class="bi bi-car-front-fill" *ngIf="tempCategory.name == 'Auto'"></i> {{tempCategory.name}}</a>
+        </div>
+
+      </div>
+      <div *ngIf="filters" class="m-3 p-3" style="border: 1px solid lightgrey; border-radius: 5px">
+        <div *ngFor="let f of filters">
+          <span>{{f.name}}</span>
+          <ul style="list-style-type: none;">
+            <li *ngFor="let opt of f.possibleChoicesList">
+              <input class="filtercheckbox" type="checkbox" (click)="checkBoxClicked(opt, f.name, $event)">
+              {{opt}}
+            </li>
+          </ul>
+        </div>
+        <div class="w-100">
+          <button class="btn btn-outline-primary w-100" (click)="clearFilters()">Clear filters</button>
+        </div>
+      </div>
     </div>
-  </div>
-  <div>
-    <button class="btn btn-outline-primary" (click)="clearFilters()">Clear filters</button>
   </div>
 </div>
 

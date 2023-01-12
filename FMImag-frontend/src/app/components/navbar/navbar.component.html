@@ -1,10 +1,15 @@
 <nav class="navbar navbar-dark bg-dark px-4" style="padding-top: 4px; padding-bottom: 4px; z-index: 99">
   <div>
-    <button class="btn btn-primary toggle-menu" style="background-color: gray;" (click)="toggleNavbar()"><i class="bi bi-list"></i></button>
-    <a routerLink="/">
-      <img src="../../../assets/FmiMag.png"
-           alt="" height="50px" class="mr-2" style=" padding: 3px; border-radius: 3px;">
-    </a>
+    <div style="display: inline-block; padding: 1px">
+      <button class="btn btn-primary toggle-menu" style="background-color: whitesmoke; color: black; border-color: grey;" (click)="toggleNavbar()">
+        <i class="bi bi-list"></i>
+      </button>
+      <a routerLink="/" class="mx-2">
+        <img src="../../../assets/FmiMag.png"
+             alt="" height="45px" class="mr-2" style="background-color: whitesmoke; padding: 5px; overflow: visible; border-radius: 30px;">
+      </a>
+    </div>
+
     <a class="navbar-brand" routerLink="/">
       FMIMag
     </a>

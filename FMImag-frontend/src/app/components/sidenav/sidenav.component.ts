@@ -91,4 +91,3 @@ export class SidenavComponent implements OnInit {
     this.productService.getFilteredProductList(this.selectedCategory!.name!, this.checkedOptions);
   }
 }
-

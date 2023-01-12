@@ -2,6 +2,7 @@
 
 <div class="justify-content-center d-flex">
   <div style="width: 45%; padding: 20px">
+
     <ngb-carousel *ngIf="product.imagesSafe" [interval]="0">
       <ng-template ngbSlide *ngFor="let pic of product.imagesSafe" style="max-height: 350px; max-width: 350px">
         <div class="picsum-img-wrapper">
@@ -9,6 +10,7 @@
         </div>
       </ng-template>
     </ngb-carousel>
+
   </div>
 </div>
 
