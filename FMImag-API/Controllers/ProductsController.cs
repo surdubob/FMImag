@@ -205,7 +205,7 @@ namespace FMImag.Controllers
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProductsByCategory(string category, [FromQuery] Dictionary<string, string> filters)
         {
             category = category.ToLower();
-            List<Product> allProducts = await dbContext.Products.ToListAsync();
+            List<Product> allProducts = await dbContext.Products.Include(p => p.Category).Where(p => p.Category.Name == category).ToListAsync();
 
             List<StringProductFilter> productFilters = null;
 
@@ -215,7 +215,10 @@ namespace FMImag.Controllers
                     productFilters = FilterHelper.getAutoFilters();
                     break;
                 case "telefoane":
-                    productFilters = FilterHelper.getAutoFilters();
+                    productFilters = FilterHelper.getPhoneFilters();
+                    break;
+                case "frigidere":
+                    productFilters = FilterHelper.getFridgeFilters();
                     break;
             }
 
@@ -482,7 +485,10 @@ namespace FMImag.Controllers
                     productFilters = FilterHelper.getAutoFilters();
                     break;
                 case "telefoane":
-                    productFilters = FilterHelper.getAutoFilters();
+                    productFilters = FilterHelper.getPhoneFilters();
+                    break;
+                case "frigidere":
+                    productFilters = FilterHelper.getFridgeFilters();
                     break;
             }
             return Ok(productFilters);
