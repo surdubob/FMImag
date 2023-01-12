@@ -15,6 +15,8 @@ export class AuthenticationService {
   private userSubject: BehaviorSubject<UserLogin | null>;
   public user: Observable<UserLogin | null>;
 
+  status: boolean = false;
+
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -25,6 +27,9 @@ export class AuthenticationService {
     this.user = this.userSubject.asObservable();
   }
 
+  modifyNavbarStatus() {
+    this.status = !this.status;
+  }
   public get userValue(): UserLogin | null {
     return this.userSubject.value;
   }

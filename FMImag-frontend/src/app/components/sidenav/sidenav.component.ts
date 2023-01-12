@@ -5,6 +5,7 @@ import {CategoryService} from "../../services/category.service";
 import {StringProductFilter} from "../../dto/filters/string-product-filter";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {ProductService} from "../../services/product.service";
+import {AuthenticationService} from "../../services/login/authentication.service";
 
 @Component({
   selector: 'app-sidenav',
@@ -21,15 +22,12 @@ export class SidenavComponent implements OnInit {
   constructor(private categoryService: CategoryService,
               private spinnerService: SpinnerService,
               private activatedRoute: ActivatedRoute,
+              public authenticationService: AuthenticationService,
               private router: Router,
               private productService: ProductService) {
   }
 
-  status: boolean = false;
 
-  clickEvent() {
-    this.status = !this.status;
-  }
 
   ngOnInit(): void {
     this.spinnerService.show();
@@ -93,3 +91,4 @@ export class SidenavComponent implements OnInit {
     this.productService.getFilteredProductList(this.selectedCategory!.name!, this.checkedOptions);
   }
 }
+
