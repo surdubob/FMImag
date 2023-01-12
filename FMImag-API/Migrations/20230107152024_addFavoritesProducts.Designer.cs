@@ -3,6 +3,7 @@ using System;
 using FMImag.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FMImag.Migrations
 {
     [DbContext(typeof(FmiDBContext))]
-    partial class FmiDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230107152024_addFavoritesProducts")]
+    partial class addFavoritesProducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +75,6 @@ namespace FMImag.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<float>("OldPrice")
-                        .HasColumnType("float");
 
                     b.Property<float>("Price")
                         .HasColumnType("float");

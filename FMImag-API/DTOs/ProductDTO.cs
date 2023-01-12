@@ -11,6 +11,7 @@ namespace FMImag.DTOs
         public int UnitsSold { get; set; }
         public int Stock { get; set; }
         public float Price { get; set; }
+        public float OldPrice { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
