@@ -152,6 +152,10 @@ export class ProductService {
   deleteProduct(userId: number) {
     return this.httpClient.post(this.baseUrl + "/deleteProduct/" + userId, null);
   }
+
+  createNewProduct(prod: Product) {
+    return this.httpClient.post(this.baseUrl, prod);
+  }
 }
 
 export interface ImageResponse {

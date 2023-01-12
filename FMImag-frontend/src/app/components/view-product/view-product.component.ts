@@ -2,7 +2,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {Product} from "../../dto/product";
 import {ImageResponse, ProductService} from "../../services/product.service";
 import {SpinnerService} from "../../services/spinner/spinner.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {ReviewService} from "../../services/review.service";
@@ -21,7 +21,7 @@ import {AuthenticationService} from "../../services/login/authentication.service
 })
 export class ViewProductComponent implements OnInit{
 
-  product: Product = {id: 0, name: "", imagesSafe: [], images: [], details: "", price: 0, stock: 0, specifications: "", oldPrice: 0, specificationsDict: new Map<string, string>()};
+  product: Product = {id: 0, name: "", categoryId: null, imagesSafe: [], images: [], description: "", price: 0, stock: 0, specifications: "", oldPrice: 0, specificationsDict: null};
 
   localsStorage:  Array<string> = [];
 
@@ -40,7 +40,8 @@ export class ViewProductComponent implements OnInit{
               private spinnerService: SpinnerService,
               private activatedRoute: ActivatedRoute,
               private sanitizer: DomSanitizer,
-              public authenticate: AuthenticationService) {
+              public authenticate: AuthenticationService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -109,7 +110,7 @@ export class ViewProductComponent implements OnInit{
     let productId = this.activatedRoute.snapshot.url[1].path;
     let userId = this.authenticate.userValue?.id;
     console.log()
-    if(this.status == true) {
+    if(this.status) {
       this.productService.addProductToFavorite(Number(userId), Number(productId)).subscribe();
     } else {
       this.productService.removeProductToFavorite(Number(userId), Number(productId)).subscribe();
@@ -161,6 +162,8 @@ export class ViewProductComponent implements OnInit{
   }
 
   deleteProduct() {
-    this.productService.deleteProduct(Number(this.activatedRoute.snapshot.url[1].path)).subscribe()
+    this.productService.deleteProduct(Number(this.activatedRoute.snapshot.url[1].path)).subscribe(data => {
+      this.router.navigateByUrl("/products");
+    })
   }
 }

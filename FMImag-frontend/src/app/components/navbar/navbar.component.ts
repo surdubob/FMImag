@@ -37,7 +37,7 @@ export class NavbarComponent implements OnInit {
 
   get userRole() {
     if(this.user)
-      return UserRole[this.user.roleId];
+      return UserRole[this.user.role];
     return 'norole';
   }
 

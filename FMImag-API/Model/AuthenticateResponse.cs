@@ -13,12 +13,13 @@ namespace FMImag.Model
         public string RefreshToken { get; set; }
 
 
-        public AuthenticateResponse(User user, string jwtToken, string refreshToken)
+        public AuthenticateResponse(User user, string jwtToken, string refreshToken, UserRole role)
         {
             Id = user.Id;
             Username = user.Username;
             Token = jwtToken;
             RefreshToken = refreshToken;
+            Role = role;
         }
     }
 }

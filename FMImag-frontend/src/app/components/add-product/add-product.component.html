@@ -1,1 +1,63 @@
-<p>add-product works!</p>
+<h2>Add a new product</h2>
+<form>
+  <div class="mb-3">
+    <label for="name" class="form-label">Product name</label>
+    <input type="text" class="form-control" id="name" name="name" [(ngModel)]="currentProduct.name">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Category</label><br>
+    <span class="text-danger" *ngIf="categoryError">Please select a category<br></span>
+    <div ngbDropdown class="d-inline-block">
+      <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+        {{selectedCategory?.name ?? 'Select category'}}
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button ngbDropdownItem (click)="selectedCategory = null; currentProduct.categoryId = null">- no selection -</button>
+        <button ngbDropdownItem *ngFor="let categ of categoryList" (click)="currentProduct.categoryId=categ.id; selectedCategory=categ; categoryError = false">{{categ.name}}</button>
+      </div>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="details" class="form-label">Product details</label>
+    <textarea class="form-control" id="details" name="details" rows="3" [(ngModel)]="currentProduct.description"></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="stock" class="form-label">Stock</label>
+    <input type="number" name="stock" class="form-control" id="stock" [(ngModel)]="currentProduct.stock">
+  </div>
+  <div class="mb-3">
+    <label for="price" class="form-label">Price</label>
+    <input type="number" name="price" class="form-control" id="price" [(ngModel)]="currentProduct.price">
+  </div>
+  <div class="mb-3">
+    <label for="specs" class="form-label">Product specifications</label>
+    <input type="text" class="form-control" id="specs" name="specs" placeholder='{"Material":"Textil"}' [(ngModel)]="currentProduct.specifications">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Product images</label>
+<!--    <input type="file" class="form-control" id="images" name="images" placeholder='{"Material":"Textil"}' [(ngModel)]="">-->
+    <button (click)="addPicture()" class="btn btn-outline-secondary">Add another picture</button>
+    <table style="width: 100%">
+      <tr>
+        <td>
+          <input name="imageUrl" type="file" accept="image/png, image/jpeg"
+                 (change)="handleInputChange($event)" class="mt-2 mb-2"/>
+        </td>
+        <td *ngIf="currentProduct.images[0]">
+          <img [src]="currentProduct.images[0].content" class="mt-2 mb-2" style="max-width:200px;max-height:200px" alt="No image uploaded"/>
+        </td>
+      </tr>
+      <tr *ngFor="let imgIndex of arrayOf(imageNumber)">
+        <td>
+          <input [name]="'imageUrl' + imgIndex" type="file" accept="image/png, image/jpeg" (change)="handleInputChange($event)" class="mt-2 mb-2"/>
+        </td>
+        <td *ngIf="currentProduct.images[imgIndex]">
+          <img [src]="currentProduct.images[imgIndex].content" class="mt-2 mb-2" style="max-width:200px;max-height:200px" alt="No image uploaded"/>
+        </td>
+      </tr>
+    </table>
+
+
+  </div>
+  <button class="btn btn-success" (click)="createProduct()">Adauga produs</button>
+</form>

@@ -29,7 +29,6 @@ namespace FMImag.Services
             if (user == null || user.Password != System.Text.Encoding.ASCII.GetString(mySha256.ComputeHash(System.Text.Encoding.ASCII.GetBytes(user.PasswordSalt + model.Password))))
                 return null;
 
-
             RemoveOldRefreshTokens(user);
 
 
@@ -40,7 +39,7 @@ namespace FMImag.Services
             _userContext.Update(user);
             _userContext.SaveChanges();
 
-            return new AuthenticateResponse(user, jwtToken, refreshToken.Token);
+            return new AuthenticateResponse(user, jwtToken, refreshToken.Token, user.UserRole);
 
         }
         public AuthenticateResponse RefreshToken(string token, string ipAddress)
@@ -71,7 +70,7 @@ namespace FMImag.Services
 
             var jwtToken = _jwtUtils.GenerateJwtToken(user);
 
-            return new AuthenticateResponse(user, jwtToken, newRefreshToken.Token);
+            return new AuthenticateResponse(user, jwtToken, newRefreshToken.Token, user.UserRole);
         }
 
         public void RevokeToken(string token, string ipAddress)

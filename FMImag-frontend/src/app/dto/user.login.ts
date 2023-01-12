@@ -5,5 +5,5 @@ export interface UserLogin {
     username: string;
     password: string;
     token?: string;
-    roleId: UserRole;
+    role: UserRole;
 }

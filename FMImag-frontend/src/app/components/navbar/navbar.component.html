@@ -7,14 +7,9 @@
     <a class="navbar-brand" routerLink="/">
       FMIMag
     </a>
+    <button class="nav-link btn btn-outline-light d-inline-block mx-2 p-1" style="color: lightgrey;" routerLink="/add-product" *ngIf="user && user.role == 1">Adauga un produs</button>
+<!--    <a style="text-decoration: none; color: lightgrey; font-weight: bold" routerLink="/add-product">Adauga un produs</a>-->
   </div>
-
-
-<!--  <ul class="navbar-nav mr-auto">-->
-<!--    <li class="nav-item">-->
-<!--      &lt;!&ndash; <a class="nav-link" routerLink="/">Item 1</a> &ndash;&gt;-->
-<!--    </li>-->
-<!--  </ul>-->
 
   <div>
     <ul class="navbar-nav mr-2">

@@ -11,7 +11,7 @@
 <div class="card-deck">
   <div class="card" class="d-inline-block" style="min-width: 18rem; max-width: 22rem; border: 1px solid lightgray; border-radius: 10px; padding: 10px; margin: 10px"
        *ngFor="let tempProduct of prodService().productsShown">
-    <img class="card-img-top" style="max-height: 18rem" [src]="tempProduct.imagesSafe[0]" alt="Card image cap">
+    <img class="card-img-top" style="max-height: 18rem" [src]="tempProduct.imagesSafe[0]" alt="Image not found">
     <div class="card-body">
       <h5 class="card-title">{{tempProduct.name}}</h5>
       <p class="card-text">{{tempProduct.price | currency: 'RON'}}</p>

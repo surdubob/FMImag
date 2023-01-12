@@ -101,6 +101,52 @@ namespace FMImag.Controllers
             return null;
         }
 
+        [HttpPost]
+        public async Task<ActionResult<ProductDTO>> CreateProduct([FromBody]ProductCreateDTO prod)
+        {
+            var categ = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == prod.CategoryId);
+            if (categ == null)
+            {
+                return NotFound();
+            }
+
+            string productCode = prod.Name.ToLower().Replace(' ', '_');
+
+            string imagePaths = "[]";
+            if (prod.Images.Count > 0)
+            {
+                imagePaths = SaveImageToDisk(prod.Images, productCode);
+            }
+
+            var p = dbContext.Products.Add(new Product
+            {
+                Name = prod.Name,
+                Category = categ,
+                CategoryId = categ.Id,
+                Price = prod.Price,
+                Description = prod.Description,
+                Specifications = prod.Specifications,
+                Stock = prod.Stock,
+                UnitsSold = 0,
+                ImagePaths = imagePaths
+            }).Entity;
+
+            await dbContext.SaveChangesAsync();
+
+            return Ok(new ProductDTO
+            {
+                Id = p.Id,
+                Category = p.Category,
+                Description = p.Description,
+                Name = p.Name,
+                Images = prod.Images,
+                Specifications = prod.Specifications,
+                Price = prod.Price,
+                Stock = prod.Stock,
+                UnitsSold = prod.UnitsSold
+            });
+        }
+
         [HttpGet("TopProducts")]
         public async Task<IEnumerable<ProductDTO>> GetTopProductFromCategories()
         {
@@ -219,9 +265,14 @@ namespace FMImag.Controllers
         }
 
 
-        private void SaveImageToDisk(IEnumerable<ImageResponse> images, string productCode)
+        private string SaveImageToDisk(IEnumerable<ImageResponse> images, string productCode)
         {
             int i = 1;
+            if (images.Count() == 0)
+            {
+                return "[]";
+            }
+            string paths = "[";
             foreach (ImageResponse image in images)
             {
                 string extension = "";
@@ -239,9 +290,15 @@ namespace FMImag.Controllers
                 var url = contentRoot + Path.DirectorySeparatorChar + productImagesFolder;
                 if (Directory.Exists(url))
                 {
-                    System.IO.File.WriteAllBytes(url + Path.DirectorySeparatorChar + productCode + (i++) + "." + extension, bytes);
+                    paths += "\"" + productCode + i + "." + extension + "\",";
+                    System.IO.File.WriteAllBytes(url + Path.DirectorySeparatorChar + productCode + i + "." + extension, bytes);
+                    i++;
                 }
             }
+
+            paths = paths.Substring(0, paths.Length - 1);
+            paths += "]";
+            return paths;
         }
 
         [HttpPost("image/{productId}")]
