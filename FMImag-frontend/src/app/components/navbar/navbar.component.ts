@@ -20,6 +20,10 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  toggleNavbar() {
+    this.authenticationService.modifyNavbarStatus()
+  }
+
   logout() {
     this.authenticationService.logout();
   }

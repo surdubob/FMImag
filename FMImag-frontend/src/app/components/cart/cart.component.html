@@ -1,16 +1,17 @@
 <h3>Cart</h3>
-<ng-container *ngIf="products.length > 0; else elseBlock">
-<div class="card col-3" style="width: 18rem;" *ngFor="let tempProduct of products">
-  <img class="card-img-top" [src]="tempProduct.imagesSafe[0]" alt="Card image cap">
-  <div class="card-body">
-    <h5 class="card-title">{{tempProduct.name}}</h5>
-    <p class="card-text">{{tempProduct.price | currency: 'RON'}}</p>
-    <p class="card-text">Quantity {{productCount.get(tempProduct.id.toString())}}</p>
-    <a href="/cart" class="btn btn-danger" (click)="deleteProduct(tempProduct.id.toString())" >Delete</a>
+<div *ngIf="products.length > 0; else elseBlock" class="card-deck">
+  <div class="card col-3 d-inline-block" style="min-width: 18rem; max-width: 22rem; border: 1px solid lightgray; border-radius: 10px; padding: 10px; margin: 10px" *ngFor="let tempProduct of products">
+    <img class="card-img-top" style="max-height: 18rem" [src]="tempProduct.imagesSafe[0]" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title">{{tempProduct.name}}</h5>
+      <p class="card-text">{{tempProduct.price | currency: 'RON'}}</p>
+      <p class="card-text">Quantity {{productCount.get(tempProduct.id.toString())}}</p>
+      <a href="/cart" class="btn btn-danger" (click)="deleteProduct(tempProduct.id.toString())" >Delete</a>
+    </div>
   </div>
+  <br>
+  <a class="btn btn-primary mt-2 d-inline-block" (click)="finishCart()" *ngIf="authenticationService.userValue">Finish Shopping</a>
 </div>
-  <a class="btn btn-primary" (click)="finishCard()" (click)="openModal()">Finish Shopping</a>
-</ng-container>
 <ng-template #elseBlock>
   <div class="alert alert-warning" role="alert">
     Cart is empty!

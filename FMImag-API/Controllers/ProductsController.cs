@@ -150,6 +150,36 @@ namespace FMImag.Controllers
             });
         }
 
+        [HttpPut]
+        public async Task<ActionResult<ProductDTO>> EditProduct([FromBody] ProductCreateDTO prod)
+        {
+            var categ = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == prod.CategoryId);
+            if (categ == null)
+            {
+                return NotFound();
+            }
+
+            var produs = await dbContext.Products.FirstOrDefaultAsync(p => p.Id == prod.Id);
+
+            if (produs == null)
+            {
+                return NotFound();
+            }
+
+            produs.OldPrice = produs.Price;
+            produs.Name = prod.Name;
+            produs.Category = categ;
+            produs.CategoryId = categ.Id;
+            produs.Price = prod.Price;
+            produs.Description = prod.Description;
+            produs.Specifications = prod.Specifications;
+            produs.Stock = prod.Stock;
+
+            await dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpGet("TopProducts")]
         public async Task<IEnumerable<ProductDTO>> GetTopProductFromCategories()
         {

@@ -4,7 +4,7 @@ import {Product} from "../../dto/product";
 import {CategoryService} from "../../services/category.service";
 import {Category} from "../../dto/category";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-add-product',
@@ -17,16 +17,29 @@ export class AddProductComponent implements OnInit{
   public categoryList: Category[] = []
   public categoryError = false;
   public selectedCategory: Category | null = null;
+  public editMode: boolean = false;
 
   constructor(public productService: ProductService,
               public categoryService: CategoryService,
+              private activatedRoute: ActivatedRoute,
               private router: Router) {
   }
 
   ngOnInit(): void {
     this.categoryService.getCategoryList().subscribe(categories => {
       this.categoryList = categories;
+      let path = this.activatedRoute.snapshot.url[0].path;
+      if (path == 'edit-product') {
+        this.editMode = true;
+        let productId = this.activatedRoute.snapshot.url[1].path;
+        this.productService.getProduct(productId).subscribe( p => {
+          this.currentProduct = p;
+          this.selectedCategory = this.categoryList.find(c => c.id == p.categoryId) ?? null;
+        });
+      }
     });
+
+
   }
 
 
@@ -64,16 +77,6 @@ export class AddProductComponent implements OnInit{
     this.currentProduct.images.push({content: reader.result, type: 'other'});
   }
 
-  uploadImage() {
-
-    // this.authService.uploadLogo(this.imageSrc, (this.isSvg ? 'svg' : 'other'), this.clientCode).subscribe(r => {
-    //   let c = confirm("The logo has been changed successfully.\nThe page will be reloaded.");
-    //   document.location.reload();
-    // }, e => {
-    //   console.error(e);
-    // });
-  }
-
 
   addPicture() {
     this.imageNumber++;
@@ -85,5 +88,14 @@ export class AddProductComponent implements OnInit{
       a.push(i + 1);
     }
     return a;
+  }
+
+  editProduct() {
+    if (this.currentProduct.categoryId == null) {
+      this.categoryError = true;
+    }
+    this.productService.editProduct(this.currentProduct).subscribe(data => {
+      this.router.navigateByUrl('/products');
+    });
   }
 }

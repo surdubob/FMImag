@@ -156,6 +156,10 @@ export class ProductService {
   createNewProduct(prod: Product) {
     return this.httpClient.post(this.baseUrl, prod);
   }
+
+  editProduct(prod: Product) {
+    return this.httpClient.put(this.baseUrl, prod);
+  }
 }
 
 export interface ImageResponse {

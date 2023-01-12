@@ -8,6 +8,7 @@ import {Product} from "../../dto/product";
 import {CartService} from "../../services/cart.service";
 import {ModalComponent} from "../modal/modal.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AuthenticationService} from "../../services/login/authentication.service";
 
 @Component({
   selector: 'app-cart',
@@ -26,7 +27,8 @@ export class CartComponent implements OnInit{
               private localStore: LocalStorageService,
               private spinnerService: SpinnerService,
               private activatedRoute: ActivatedRoute,
-              private sanitizer: DomSanitizer) {}
+              private sanitizer: DomSanitizer,
+              public authenticationService: AuthenticationService) {}
 
   ngOnInit(): void {
     this.cartProducts();
@@ -108,7 +110,7 @@ export class CartComponent implements OnInit{
     }
   }
 
-  finishCard() {
+  finishCart() {
     var cart_json = this.localStore.getData("cart");
     var cart;
     if (cart_json != null) {
@@ -118,5 +120,6 @@ export class CartComponent implements OnInit{
       this.cartService.updateCart(product).subscribe();
     }
     this.localStore.removeData("cart");
+    this.openModal();
   }
 }

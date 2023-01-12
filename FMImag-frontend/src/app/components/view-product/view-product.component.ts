@@ -166,4 +166,8 @@ export class ViewProductComponent implements OnInit{
       this.router.navigateByUrl("/products");
     })
   }
+
+  editProduct() {
+    this.router.navigateByUrl("/edit-product/" + this.product.id);
+  }
 }
