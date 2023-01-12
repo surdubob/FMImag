@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.sass']
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
 
@@ -19,8 +19,6 @@ export class NavbarComponent implements OnInit {
 
     });
   }
-
-  navbarOpen = false;
 
   toggleNavbar() {
     this.authenticationService.modifyNavbarStatus()

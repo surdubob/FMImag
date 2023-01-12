@@ -1,9 +1,10 @@
 #sidebar-wrapper {
   margin-left: -15rem;
-  -webkit-transition: margin .25s ease-out;
-  -moz-transition: margin .25s ease-out;
-  -o-transition: margin .25s ease-out;
-  transition: margin .25s ease-out;
+  -webkit-transition: margin .5s ease-out;
+  -moz-transition: margin .5s ease-out;
+  -o-transition: margin .5s ease-out;
+  transition: margin .5s ease-out;
+  background-color: white;
 }
 
 #sidebar-wrapper .sidebar-heading {
@@ -12,7 +13,7 @@
 }
 
 #sidebar-wrapper .list-group {
-  width: 15rem;
+  width: 15vw;
 }
 
 #page-content-wrapper {
@@ -40,8 +41,7 @@
   }
   .hide
   {
-    margin-left: -15rem!important;
-    margin-right: 30rem!important;
+    margin-left: 0!important;
   }
 }
 @media (max-width: 767px) {
@@ -51,7 +51,7 @@
   }
   .show
   {
-    margin-top: -20rem!important;
+    margin-top: -40rem!important;
     margin-left: 0!important;
   }
   .hide
