@@ -2,11 +2,11 @@
 <!--  <button class="btn btn-primary toggle-menu" (click)="clickEvent()">Toggle Menu</button>-->
 </div>
 
-<div class="bg-light border-right" id="sidebar-wrapper" [ngClass]="authenticationService.status ? 'hide' : 'show'">
+<div class="border-right" id="sidebar-wrapper" [ngClass]="authenticationService.status ? 'hide' : 'show'">
   <div class="list-group list-group-flush">
-    <a href="/products" class="list-group-item list-group-item-action bg-light">Toate Produsele</a>
-    <span class="list-group-item">Categories</span>
-    <a href="/products/{{tempCategory.name}}" class="list-group-item list-group-item-action bg-light" style="text-transform: capitalize;" *ngFor="let tempCategory of categories">{{tempCategory.name}}</a>
+    <a href="/products" class="list-group-item list-group-item-action bg-light">All Products</a>
+    <span class="list-group-item" style="font-weight: bold">Categories</span>
+    <a href="/products/{{tempCategory.name}}" class="list-group-item list-group-item-action" style="text-transform: capitalize;" *ngFor="let tempCategory of categories">{{tempCategory.name}}</a>
   </div>
   <div *ngIf="filters">
     <div *ngFor="let f of filters">
