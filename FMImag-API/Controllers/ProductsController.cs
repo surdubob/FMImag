@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml.Linq;
 using EmsDTOs;
 using FMImag.DTOs;
 using FMImag.Filters;
@@ -7,6 +8,7 @@ using FMImag.Helper;
 using FMImag.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FMImag.Controllers
 {
@@ -70,6 +72,7 @@ namespace FMImag.Controllers
                 Description = prod.Description,
                 Name = prod.Name,
                 Price = prod.Price,
+                OldPrice = prod.OldPrice,
                 Stock = prod.Stock,
                 UnitsSold = prod.UnitsSold,
                 Specifications = prod.Specifications
@@ -216,6 +219,21 @@ namespace FMImag.Controllers
             return responseDtos;
         }
 
+        [HttpPost("deleteProduct/{productId}")]
+        [AllowAnonymous]
+        //[AuthorizeRoles(UserRole.ADMIN)]
+        public async Task<ActionResult> DeleteProduct(int productId)
+        {
+            var product = dbContext.Products.FirstOrDefault(p => p.Id == productId);
+            if (product != null)
+            {
+                dbContext.Products.Remove(product);
+                await dbContext.SaveChangesAsync();
+                return Ok();
+            }
+            return NotFound();
+        }
+
 
         [HttpGet("image/{productId}")]
         [AllowAnonymous]
@@ -347,6 +365,71 @@ namespace FMImag.Controllers
                 });
             }
             return reviewDTOs;
+        }
+
+        [HttpGet("favorite/{userId}/{productId?}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ProductDTO>>GetIfProductIsFavorite(int userId, int? productId = -1)
+        {  
+            if (productId != -1)
+            {
+                var favoriteProduct = await dbContext.FavoriteProducts.Include(p => p.Product).Where(p => p.ProductId == productId && p.UserId == userId).FirstOrDefaultAsync();
+                if (favoriteProduct == null)
+                {
+                    return Ok(null);
+                }
+                else
+                {
+                    return Ok(favoriteProduct);
+                }
+            }
+            else
+            {
+                var productDTOs = new List<ProductDTO>();
+                var favoriteProduct = await dbContext.FavoriteProducts.Include(p => p.Product).Where(p => p.UserId == userId).ToListAsync();
+                foreach (var p in favoriteProduct)
+                {
+                    var product = dbContext.Products.Where(r => r.Id == p.ProductId).FirstOrDefault();
+                    if (product != null)
+                    {
+                        productDTOs.Add(GetProductWithPicture(product));
+                    }
+                }
+                return Ok(productDTOs);
+            }
+        }
+
+        [HttpPost("addFavorite/{userId}/{productId}")]
+        [AllowAnonymous]
+        public async Task<ActionResult> AddProductToFavorite(int userId, int productId)
+        {
+            var product = dbContext.Products.Where(r => r.Id == productId).FirstOrDefault();
+            if (product != null)
+            {
+                dbContext.FavoriteProducts.Add(new FavoriteProducts
+                {
+                    Product = product,
+                    ProductId = productId,
+                    UserId = userId
+                });
+                await dbContext.SaveChangesAsync();
+                return Ok();
+            }
+            return NotFound();
+        }
+
+        [HttpPost("removeFavorite/{userId}/{productId}")]
+        [AllowAnonymous]
+        public async Task<ActionResult> RemoveProductToFavorite(int userId, int productId)
+        {
+            var favoriteProduct = await dbContext.FavoriteProducts.Include(p => p.Product).Where(p => p.ProductId == productId && p.UserId == userId).FirstOrDefaultAsync();
+            if (favoriteProduct != null)
+            {
+                dbContext.FavoriteProducts.Remove(favoriteProduct);
+                await dbContext.SaveChangesAsync();
+                return Ok();
+            }
+            return NotFound();
         }
 
         [HttpPost("postReview")]
