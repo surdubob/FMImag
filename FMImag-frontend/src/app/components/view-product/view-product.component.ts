@@ -154,6 +154,7 @@ export class ViewProductComponent implements OnInit{
     }
     this.localStore.saveData("cart", JSON.stringify(new_cart));
   }
+
   refreshReviews() {
     this.reviewsShown = this.reviews.map((review, i) => ({ id: i + 1, ...review })).slice(
       (this.page - 1) * this.pageSize,

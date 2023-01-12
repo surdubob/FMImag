@@ -43,12 +43,12 @@
       <th style="text-align: left; padding: 8px;">Specification</th>
       <th style="text-align: left; padding: 8px;">Value</th>
     </tr>
-    <tr *ngFor="let k of product.specificationsDict.keys()" class="stripe">
+    <tr *ngFor="let k of product.specificationsDict | keyvalue" class="stripe">
       <td style="border: 1px solid lightgrey; text-align: left; padding: 8px;">
-        {{k}}
+        {{k.key}}
       </td>
       <td style="border: 1px solid lightgrey; text-align: left; padding: 8px;">
-        {{product.specificationsDict.get(k)}}
+        {{k.value}}
       </td>
     </tr>
   </table>

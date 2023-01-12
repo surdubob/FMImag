@@ -27,7 +27,7 @@
   (pageChange)="prodService().refreshProducts()"></ngb-pagination>
 
 <select class="form-select" style="width: auto" [(ngModel)]="prodService().pageSize" (ngModelChange)="prodService().refreshProducts()" [ngModelOptions]="{standalone: true}">
-  <option [ngValue]="2">2 items per page</option>
-  <option [ngValue]="4">4 items per page</option>
+  <option [ngValue]="3">3 items per page</option>
   <option [ngValue]="6">6 items per page</option>
+  <option [ngValue]="9">9 items per page</option>
 </select>

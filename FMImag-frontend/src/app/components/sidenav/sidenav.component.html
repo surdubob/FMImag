@@ -3,15 +3,15 @@
   <div class="p-2">
     <div style="border: 1px solid lightgrey; border-radius: 5px;">
       <div class="list-group list-group-flush w-100" >
-        <a href="/products" class="list-group-item list-group-item-action bg-light"> <i class="bi bi-bag"></i> All Products</a>
-        <span class="list-group-item" style="font-weight: bold"><i class="bi bi-tags"></i> Categories</span>
+        <a href="/products" class="list-group-item list-group-item-action bg-light"> <i class="bi bi-bag" style="font-size: 1rem"></i> All Products</a>
+        <span class="list-group-item" style="font-weight: bold"><i class="bi bi-tags" style="font-size: 1rem"></i> Categories</span>
         <div class="list-group-item list-group-item-action">
           <a href="/products/{{tempCategory.name}}" style="text-transform: capitalize; text-decoration: none; color: black" class="mx-3"
-             *ngFor="let tempCategory of categories"><i class="bi bi-car-front-fill" *ngIf="tempCategory.name == 'Auto'"></i> {{tempCategory.name}}</a>
+             *ngFor="let tempCategory of categories"><i class="bi bi-car-front-fill" style="font-size: 1rem" *ngIf="tempCategory.name == 'Auto'"></i> {{tempCategory.name}}</a>
         </div>
 
       </div>
-      <div *ngIf="filters" class="m-3 p-3" style="border: 1px solid lightgrey; border-radius: 5px">
+      <div *ngIf="filters.length > 0" class="m-3 p-3" style="border: 1px solid lightgrey; border-radius: 5px">
         <div *ngFor="let f of filters">
           <span>{{f.name}}</span>
           <ul style="list-style-type: none;">
